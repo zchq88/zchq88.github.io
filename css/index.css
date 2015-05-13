@@ -1,0 +1,17 @@
+.zchq88-profiles {
+    width: 16%;
+    margin-top: -10%;
+    position: absolute;
+    margin-left: 42%;
+}
+
+.zchq88-header-info {
+    margin-top: 10%;
+}
+
+.zchq88-aside-button {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    z-index: 1000;
+}
