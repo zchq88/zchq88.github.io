@@ -18,6 +18,13 @@
     z-index: 1000;
 }
 
+.zchq88-toolbar {
+    position: fixed;
+    right: 10px;
+    bottom: 70px;
+    z-index: 999;
+}
+
 .zchq88-timeline {
     position: relative;
     padding: 2em 0;
@@ -71,7 +78,7 @@
     border-radius: 6px;
     background: #d4d4d4;
     padding: 10px;
-    font-weight:bolder;
+    font-weight: bolder;
 }
 
 .zchq88-timeline-content {

@@ -47,7 +47,7 @@
   以获得更好的体验！</p>
 <![endif]-->
 
-    <header>
+    <header id="zchq88-top">
         <div class="am-slider am-slider-default" data-am-flexslider>
             <ul class="am-slides">
                 <li><img src="image/banner.jpg" />
@@ -78,7 +78,16 @@
                     </div>
                 </div>
             </div>
-            <a href="#menu-offcan" class="am-icon-btn am-icon-bars am-show-sm-only zchq88-aside-button" data-am-offcanvas=""><span class="am-sr-only">侧栏导航</span></a>
+            <div class="am-u-sm-12 am-panel-group am-show-sm-only">
+                <ul class="am-list">
+                    <li ng-repeat="y in naclinks[0].childlinks">
+                        <a href="{{y.href}}">{{y.title}}</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!--边侧栏导航-->
+            <!--<a href="#menu-offcan" class="am-icon-btn am-icon-bars am-show-sm-only zchq88-aside-button" data-am-offcanvas=""><span class="am-sr-only">侧栏导航</span></a>
             <nav data-am-widget="menu" class="am-menu  am-menu-offcanvas1" data-am-menu-offcanvas>
                 <div class="am-offcanvas" id="menu-offcan">
                     <div class="am-offcanvas-bar">
@@ -95,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-            </nav>
+            </nav>-->
         </aside>
         <!--边侧导航-end-->
         <section class="am-u-md-9">
@@ -123,9 +132,8 @@
                             <h2>东航金融</h2>
                             <ol>
                                 <li>蓝海密剑项目，部分前段页面，首页数据获取展示。</li>
-                                <li>增值服务中心项目，全部前段页面。参与项目</li>
+                                <li>增值服务中心项目，全部前段页面。参与项目方案讨论</li>
                             </ol>
-                            <p>负责WEB前段界面制作，响应式页面开发，尝试NODEJS开发实时交互，用SOCKET.IO实现实时页面推送。</p>
                             <a href="#">详细信息</a>
                             <span class="zchq88-date">2014-11-16</span>
                         </div>
@@ -137,17 +145,15 @@
 
                         <div class="zchq88-timeline-content">
                             <h2>上海洪剑智能科技有限公司</h2>
-                            <p>
-                                <ol>
-                                    <li>用C语言完成韦根信号接口板开发。</li>
-                                    <li>主管工博会中远距离人脸识别和视频人脸检索识别演示项目。</li>
-                                    <li>完成了人脸识别更新算法，解决人脸识别更新人脸库的问题。</li>
-                                    <li>研发虚拟人防误识策略，减少误识率。</li>
-                                    <li>研发清晰度判断算法减少模糊照片带来的误识。</li>
-                                    <li>修改识别策略改善识别速度。</li>
-                                    <li>WPF重构项目完成界面改观和软件优化。</li>
-                                </ol>
-                            </p>
+                            <ol>
+                                <li>用C语言完成韦根信号接口板开发。</li>
+                                <li>主管工博会中远距离人脸识别和视频人脸检索识别演示项目。</li>
+                                <li>完成了人脸识别更新算法，解决人脸识别更新人脸库的问题。</li>
+                                <li>研发虚拟人防误识策略，减少误识率。</li>
+                                <li>研发清晰度判断算法减少模糊照片带来的误识。</li>
+                                <li>修改识别策略改善识别速度。</li>
+                                <li>WPF重构项目完成界面改观和软件优化。</li>
+                            </ol>
                             <a href="#">详细信息</a>
                             <span class="zchq88-date">2011-01-01</span>
                         </div>
@@ -160,11 +166,13 @@
                 </section>
             </div>
             <div class="am-g" id="zchq88-div3">
-                <h2 class="am-margin-left">个人作品</h2>                
+                <h2 class="am-margin-left">个人作品</h2>
             </div>
         </section>
     </section>
-
+    <div class="zchq88-toolbar">
+        <a href="#zchq88-top" title="回到顶部" class="am-icon-btn am-icon-arrow-up am-active" id="amz-go-top"></a>
+    </div>
     <!--[if lt IE 9]>
 <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
@@ -179,8 +187,9 @@
     <!--<![endif]-->
     <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
     <script>
+        /*滚动页内跳转*/
         $(document).ready(function () {
-            $('a[href*=#]').click(function () {
+            $('a[href*=#zchq88-]').click(function () {
                 if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
                     var $target = $(this.hash);
                     $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
