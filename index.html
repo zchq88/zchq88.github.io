@@ -58,21 +58,22 @@
             <img src="image/profiles.jpg" class="am-circle" width="100%" />
         </div>
         <div class="zchq88-header-info am-text-center">
-            <h2>姓名：朱辰卿,Name：Jordan,ID：zchq88</h2>
-            <p>WEB前段程序员</p>
+            <h2>姓名：朱辰卿</br>Name：Jordan</br>ID：zchq88</h2>
+            <p>WEB前段程序员,c#程序员，图像算法</p>
         </div>
     </header>
     <section class="am-g am-g-fixed">
-        <aside class="am-u-md-3" ng-controller="AsideNavController">
-            <div class="am-panel-group am-hide-sm-only" id="asidenav">
-                <div class="am-panel am-panel-default" ng-repeat="x in naclinks">
+        <!--边侧导航-begin-->
+        <aside ng-controller="AsideNavController">
+            <div class="am-u-md-3 am-panel-group am-hide-sm-only" id="asidenav">
+                <div class="am-panel am-panel-default" ng-repeat="x in naclinks" data-am-sticky>
                     <div class="am-panel-hd">
                         <h4 class="am-panel-title" data-am-collapse="{parent: '#asidenav', target:'#{{x.id}}'}">
 					{{x.title}}</h4>
                     </div>
                     <div id="{{x.id}}" class="am-panel-collapse am-collapse {{x.class}}">
                         <div class="am-panel-bd {{y.class}}" ng-repeat="y in x.childlinks">
-                            <a title="{{y.href}}" target="a_right_frame" onclick="asidenav_a_click(this)">{{y.title}}</a>
+                            <a href="{{y.href}}">{{y.title}}</a>
                         </div>
                     </div>
                 </div>
@@ -88,7 +89,7 @@
                             </div>
                             <div id="{{x.id}}" class="am-panel-collapse am-collapse {{x.class}}">
                                 <div class="am-panel-bd {{y.class}}" ng-repeat="y in x.childlinks">
-                                    <a title="{{y.href}}" target="a_right_frame" onclick="asidenav_a_click(this)">{{y.title}}</a>
+                                    <a href="{{y.href}}">{{y.title}}</a>
                                 </div>
                             </div>
                         </div>
@@ -96,8 +97,71 @@
                 </div>
             </nav>
         </aside>
-        <section>
-            主页面
+        <!--边侧导航-end-->
+        <section class="am-u-md-9">
+            <div class="am-g" id="zchq88-div1">
+                <h2 class="am-margin-left">个人简介</h2>
+                <p class="am-u-sm-6"> <span class="am-icon-calendar"></span> 生日：1988/09/26</p>
+                <p class="am-u-sm-6"> <span class="am-icon-home"></span> 地址：上海市闸北区彭浦新村</p>
+                <p class="am-u-sm-6"> <span class="am-icon-envelope"></span> 邮箱：zchq88@aliyun.com</p>
+                <p class="am-u-sm-6"> <span class="am-icon-globe"></span> 个人网页http://zchq88.github.io/</p>
+            </div>
+            <div class="am-g" id="zchq88-div2">
+                <h2 class="am-margin">个人经历</h2>
+                <section class="zchq88-container zchq88-timeline">
+                    <div class="zchq88-timeline-block">
+                        <div class="zchq88-timeline-text">
+                            工作
+                        </div>
+                    </div>
+                    <div class="zchq88-timeline-block">
+                        <div class="zchq88-timeline-img">
+                            <span class="am-icon-home am-icon-lg"></span>
+                        </div>
+
+                        <div class="zchq88-timeline-content">
+                            <h2>东航金融</h2>
+                            <ol>
+                                <li>蓝海密剑项目，部分前段页面，首页数据获取展示。</li>
+                                <li>增值服务中心项目，全部前段页面。参与项目</li>
+                            </ol>
+                            <p>负责WEB前段界面制作，响应式页面开发，尝试NODEJS开发实时交互，用SOCKET.IO实现实时页面推送。</p>
+                            <a href="#">详细信息</a>
+                            <span class="zchq88-date">2014-11-16</span>
+                        </div>
+                    </div>
+                    <div class="zchq88-timeline-block">
+                        <div class="zchq88-timeline-img">
+                            <span class="am-icon-home am-icon-lg"></span>
+                        </div>
+
+                        <div class="zchq88-timeline-content">
+                            <h2>上海洪剑智能科技有限公司</h2>
+                            <p>
+                                <ol>
+                                    <li>用C语言完成韦根信号接口板开发。</li>
+                                    <li>主管工博会中远距离人脸识别和视频人脸检索识别演示项目。</li>
+                                    <li>完成了人脸识别更新算法，解决人脸识别更新人脸库的问题。</li>
+                                    <li>研发虚拟人防误识策略，减少误识率。</li>
+                                    <li>研发清晰度判断算法减少模糊照片带来的误识。</li>
+                                    <li>修改识别策略改善识别速度。</li>
+                                    <li>WPF重构项目完成界面改观和软件优化。</li>
+                                </ol>
+                            </p>
+                            <a href="#">详细信息</a>
+                            <span class="zchq88-date">2011-01-01</span>
+                        </div>
+                    </div>
+                    <div class="zchq88-timeline-block">
+                        <div class="zchq88-timeline-text">
+                            教育
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="am-g" id="zchq88-div3">
+                <h2 class="am-margin-left">个人作品</h2>                
+            </div>
         </section>
     </section>
 
@@ -115,6 +179,23 @@
     <!--<![endif]-->
     <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
     <script>
+        $(document).ready(function () {
+            $('a[href*=#]').click(function () {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var $target = $(this.hash);
+                    $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
+                    if ($target.length) {
+                        var targetOffset = $target.offset().top;
+                        $('html,body').animate({
+                                scrollTop: targetOffset
+                            },
+                            1000);
+                        return false;
+                    }
+                }
+            });
+        });
+
         var myapp = angular.module('myapp', []);
         myapp.run(function ($rootScope) {});
         myapp.controller(
@@ -126,17 +207,17 @@
                     class: "am-in",
                     childlinks: [
                         {
-                            href: "#",
-                            title: "个人简介",                            
+                            href: "#zchq88-div1",
+                            title: "个人简介"
         },
                         {
-                            href: "#",
+                            href: "#zchq88-div2",
+                            title: "个人经历"
+        },
+                        {
+                            href: "#zchq88-div3",
                             title: "个人作品"
-        },
-                        {
-                            href: "#",
-                            title: "个人学习"
-        },]
+        }, ]
      }];
             });
     </script>

@@ -3,6 +3,8 @@
     margin-top: -10%;
     position: absolute;
     margin-left: 42%;
+    border-radius: 50%;
+    box-shadow: 0 0 0 5px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
 }
 
 .zchq88-header-info {
@@ -14,4 +16,121 @@
     right: 10px;
     bottom: 10px;
     z-index: 1000;
+}
+
+.zchq88-timeline {
+    position: relative;
+    padding: 2em 0;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.zchq88-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 18px;
+    height: 100%;
+    width: 4px;
+    background: #d7e4ed;
+}
+
+.zchq88-timeline-block {
+    position: relative;
+    margin: 2em 0;
+}
+
+.zchq88-timeline-block:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.zchq88-timeline-block:first-child {
+    margin-top: 0;
+}
+
+.zchq88-timeline-block:last-child {
+    margin-bottom: 0;
+}
+
+.zchq88-timeline-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+    background-color: white;
+}
+
+.zchq88-timeline-text {
+    text-align: center;
+    width: 30%;
+    border-radius: 6px;
+    background: #d4d4d4;
+    padding: 10px;
+    font-weight:bolder;
+}
+
+.zchq88-timeline-content {
+    position: relative;
+    margin-left: 60px;
+    background: white;
+    border-radius: 0.25em;
+    padding: 1em;
+    box-shadow: 0 3px 0 #d7e4ed;
+    background-color: blanchedalmond;
+}
+
+.zchq88-timeline-content .zchq88-date {
+    padding: .8em 0;
+    opacity: .7;
+}
+
+@media only screen and (min-width: 1170px) {
+    .zchq88-timeline::before {
+        left: 50%;
+        margin-left: -2px;
+    }
+    .zchq88-timeline-block {
+        margin: 4em 0;
+    }
+    .zchq88-timeline-img {
+        width: 60px;
+        height: 60px;
+        left: 50%;
+        margin-left: -30px;
+        -webkit-transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+    }
+    .zchq88-timeline-img span {
+        display: block;
+        position: relative;
+        left: 20%;
+        top: 20%;
+    }
+    .zchq88-timeline-content {
+        margin-left: 0;
+        padding: 1.6em;
+        width: 45%;
+    }
+    .zchq88-timeline-block:nth-child(even) .zchq88-timeline-content {
+        float: right;
+    }
+    .zchq88-timeline-content .zchq88-date {
+        position: absolute;
+        width: 10rem;
+        left: 130%;
+        top: 6px;
+    }
+    .zchq88-timeline-block:nth-child(even) .zchq88-timeline-content .zchq88-date {
+        left: auto;
+        right: 130%;
+        text-align: right;
+    }
+    .zchq88-timeline-text {
+        margin: auto;
+    }
 }
