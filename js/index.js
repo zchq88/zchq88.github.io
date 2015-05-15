@@ -32,11 +32,15 @@
         },
                  {
                      href: "#zchq88-div2",
-                     title: "个人经历"
+                     title: "个人技能"
         },
                  {
                      href: "#zchq88-div3",
-                     title: "个人技能"
+                     title: "个人经历"
+        },
+                 {
+                     href: "#zchq88-div4",
+                     title: "自我评价"
         }, ]
      }];
      });
