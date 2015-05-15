@@ -59,7 +59,7 @@
         </div>
         <div class="zchq88-header-info am-text-center">
             <h2>姓名：朱辰卿</br>Name：Jordan</br>ID：zchq88</h2>
-            <p>WEB前段程序员,c#程序员，图像算法</p>
+            <p>WEB前段程序员，c#程序员，图像算法</p>
         </div>
     </header>
     <section class="am-g am-g-fixed">
@@ -134,7 +134,6 @@
                                 <li>蓝海密剑项目，部分前段页面，首页数据获取展示。</li>
                                 <li>增值服务中心项目，全部前段页面。参与项目方案讨论</li>
                             </ol>
-                            <a href="#">详细信息</a>
                             <span class="zchq88-date">2014-11-16</span>
                         </div>
                     </div>
@@ -154,22 +153,52 @@
                                 <li>修改识别策略改善识别速度。</li>
                                 <li>WPF重构项目完成界面改观和软件优化。</li>
                             </ol>
-                            <a href="#">详细信息</a>
                             <span class="zchq88-date">2011-01-01</span>
                         </div>
                     </div>
+                    <div class="zchq88-timeline-block"></div>
                     <div class="zchq88-timeline-block">
                         <div class="zchq88-timeline-text">
                             教育
                         </div>
                     </div>
+                    <div class="zchq88-timeline-block">
+                        <div class="zchq88-timeline-img">
+                            <span class="am-icon-home am-icon-lg"></span>
+                        </div>
+
+                        <div class="zchq88-timeline-content">
+                            <h2>上海市应用技术学院</h2>
+                            <ol>
+                                <li>计算机工程专业。</li>
+                                <li>拿过两次奖学金。</li>
+                                <li>优秀毕业设计。</li>
+                                <li>专业课和专业课课程设计几乎全部优秀。</li>
+                            </ol>
+                            <a href="/download/%E6%9C%B1%E8%BE%B0%E5%8D%BF%E6%88%90%E7%BB%A9.docx">个人成绩下载</a>
+                            <span class="zchq88-date">2011-01-01</span>
+                        </div>
+                    </div>
                 </section>
             </div>
             <div class="am-g" id="zchq88-div3">
-                <h2 class="am-margin-left">个人作品</h2>
+                <h2 class="am-margin-left">个人技能</h2>
+                <div id="skill-chart" style="height:400px"></div>
             </div>
         </section>
     </section>
+    <footer class="am-footer zchq88-footer">
+        <div class="am-g am-g-fixed">
+            <div class="am-u-md-8">
+                <h2>zchq88</h2>
+                <ul>
+                    <li><span class="am-icon-heart">&nbsp;参考、使用的项目：</span> | <a href="http://amazeui.org/">AmazeUI</a> | <a href="http://echarts.baidu.com/">ECharts</a>
+                    </li>
+                </ul>
+                <p>© 2015 zchq88, Inc. Licensed under <a href="http://opensource.org/licenses/MIT" target="_blank">MIT license</a>. Developed with <a href="http://blog.brackets.io/" target="_blank">Brackets</a>.</p>
+            </div>
+        </div>
+    </footer>
     <div class="zchq88-toolbar">
         <a href="#zchq88-top" title="回到顶部" class="am-icon-btn am-icon-arrow-up am-active" id="amz-go-top"></a>
     </div>
@@ -186,50 +215,9 @@
     <script src="assets/js/amazeui.min.js"></script>
     <!--<![endif]-->
     <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
-    <script>
-        /*滚动页内跳转*/
-        $(document).ready(function () {
-            $('a[href*=#zchq88-]').click(function () {
-                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-                    var $target = $(this.hash);
-                    $target = $target.length && $target || $('[name=' + this.hash.slice(1) + ']');
-                    if ($target.length) {
-                        var targetOffset = $target.offset().top;
-                        $('html,body').animate({
-                                scrollTop: targetOffset
-                            },
-                            1000);
-                        return false;
-                    }
-                }
-            });
-        });
-
-        var myapp = angular.module('myapp', []);
-        myapp.run(function ($rootScope) {});
-        myapp.controller(
-            "AsideNavController",
-            function ($scope, $http) {
-                $scope.naclinks = [{
-                    title: "目录",
-                    id: "AsideNav1",
-                    class: "am-in",
-                    childlinks: [
-                        {
-                            href: "#zchq88-div1",
-                            title: "个人简介"
-        },
-                        {
-                            href: "#zchq88-div2",
-                            title: "个人经历"
-        },
-                        {
-                            href: "#zchq88-div3",
-                            title: "个人作品"
-        }, ]
-     }];
-            });
-    </script>
+    <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/skill-chart.js"></script>
 </body>
 
 </html>

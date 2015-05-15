@@ -11,6 +11,12 @@
     margin-top: 10%;
 }
 
+@media only screen and (max-width: 640px) {
+    .zchq88-header-info {
+        margin-top: 13%;
+    }
+}
+
 .zchq88-aside-button {
     position: fixed;
     right: 10px;
@@ -140,4 +146,8 @@
     .zchq88-timeline-text {
         margin: auto;
     }
+}
+.zchq88-footer {
+    text-align: left;
+    background-color: darkgray
 }
