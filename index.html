@@ -62,10 +62,13 @@
         </a>
                     <ul class="am-dropdown-content">
                         <li class="am-dropdown-header">网页作品</li>
-                        <li><a href="http://www.lhmj.org/">蓝海密剑</a></li>
-                        <li><a href="http://analyse.kiiik.com/">增值服务中心</a></li>
+                        <li><a href="http://www.lhmj.org/">蓝海密剑</a>
+                        </li>
+                        <li><a href="http://analyse.kiiik.com/">增值服务中心</a>
+                        </li>
                     </ul>
                 </li>
+                <li class=""><a href="../my-angularjs/my-angularjs.html">angularjs学习</a>
                 </li>
             </ul>
             <div class="am-topbar-right">
@@ -98,15 +101,17 @@
     <section class="am-g am-g-fixed">
         <!--边侧导航-begin-->
         <aside ng-controller="AsideNavController">
-            <div class="am-u-md-3 am-panel-group am-hide-sm-only" id="asidenav">
-                <div class="am-panel am-panel-default" ng-repeat="x in naclinks" data-am-sticky>
-                    <div class="am-panel-hd">
-                        <h4 class="am-panel-title" data-am-collapse="{parent: '#asidenav', target:'#{{x.id}}'}">
+            <div class="am-u-md-3 ">
+                <div class="am-panel-group am-hide-sm-only" id="asidenav" data-am-sticky>
+                    <div class="am-panel am-panel-default" ng-repeat="x in naclinks">
+                        <div class="am-panel-hd">
+                            <h4 class="am-panel-title" data-am-collapse="{parent: '#asidenav', target:'#{{x.id}}'}">
 					{{x.title}}</h4>
-                    </div>
-                    <div id="{{x.id}}" class="am-panel-collapse am-collapse {{x.class}}">
-                        <div class="am-panel-bd {{y.class}}" ng-repeat="y in x.childlinks">
-                            <a href="{{y.href}}">{{y.title}}</a>
+                        </div>
+                        <div id="{{x.id}}" class="am-panel-collapse am-collapse" ng-class="{'am-in': ($index==0)}">
+                            <div class="am-panel-bd" ng-repeat="y in x.childlinks">
+                                <a href="#{{y.href}}">{{y.title}}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,7 +119,7 @@
             <div class="am-u-sm-12 am-panel-group am-show-sm-only">
                 <ul class="am-list">
                     <li ng-repeat="y in naclinks[0].childlinks">
-                        <a href="{{y.href}}">{{y.title}}</a>
+                        <a href="#{{y.href}}">{{y.title}}</a>
                     </li>
                 </ul>
             </div>

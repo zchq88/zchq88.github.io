@@ -1,0 +1,154 @@
+<!doctype html>
+<html class="no-js" ng-app="myapp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>my-angularjs</title>
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+    <meta name="msapplication-TileColor" content="#0e90d2">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+  <link rel="canonical" href="http://www.example.com/">
+  -->
+
+    <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器。 请 <a
+  href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+    <header id="zchq88-gundong-top" class="am-g am-g-fixed am-topbaram-topbar ">
+        <h1 class="am-topbar-brand"><a href="http://zchq88.github.io/">zchq88</a></h1>
+
+        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span>
+        </button>
+
+        <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+            <ul class="am-nav am-nav-pills am-topbar-nav">
+                <li class=""><a href="../index.html">个人首页</a>
+                </li>
+                <li class="am-dropdown" data-am-dropdown>
+                    <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+          个人作品 <span class="am-icon-caret-down"></span>
+        </a>
+                    <ul class="am-dropdown-content">
+                        <li class="am-dropdown-header">网页作品</li>
+                        <li><a href="http://www.lhmj.org/">蓝海密剑</a>
+                        </li>
+                        <li><a href="http://analyse.kiiik.com/">增值服务中心</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="am-active"><a href="../my-angularjs/my-angularjs.html">angularjs学习</a>
+                </li>
+            </ul>
+            <div class="am-topbar-right">
+                <div class="am-dropdown" data-am-dropdown="{boundary: '.am-topbar'}">
+                    <button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm am-dropdown-toggle" data-am-dropdown-toggle>其他 <span class="am-icon-caret-down"></span>
+                    </button>
+                    <ul class="am-dropdown-content">
+                        <li><a href="#">都说了是其他了还点!（^-^）</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="am-margin-vertical" style="background-color: #eeeeee;">
+        <div class="am-g am-g-fixed"><img class="am-margin" src="../image/my-angularjs/AngularJS.jpg">
+        </div>
+    </div>
+    <section class="am-g am-g-fixed">
+        <!--边侧导航-begin-->
+        <aside ng-controller="Nav">
+            <div class="am-u-md-3">
+                <div class="am-panel-group am-hide-sm-only" id="asidenav" data-am-sticky>
+                    <div class="am-panel am-panel-default" ng-repeat="x in naclinks">
+                        <div class="am-panel-hd">
+                            <h4 class="am-panel-title" data-am-collapse="{parent: '#asidenav', target:'#{{x.id}}'}" ng-click="aside_nav_h4_click($index)">{{x.title}}</h4>
+                        </div>
+                        <div id="{{x.id}}" class="am-panel-collapse am-collapse" ng-class="{'am-in': ($index==0)}">
+                            <div class="am-panel-bd" ng-repeat="y in x.childlinks">
+                                <a href="#{{y.href}}">{{y.title}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="am-u-sm-12 am-panel-group am-show-sm-only" ng-repeat="x in naclinks" ng-show="linksshow($index)">
+                <ul class="am-list">
+                    <li ng-repeat="y in x.childlinks">
+                        <a href="#{{y.href}}">{{y.title}}</a>
+                    </li>
+                </ul>
+            </div>
+            <nav data-am-widget="menu" class="am-menu  am-menu-offcanvas1" data-am-menu-offcanvas>
+                <div class="am-offcanvas" id="menu-offcan">
+                    <div class="am-offcanvas-bar">
+                        <div class="am-panel am-panel-default" ng-repeat="x in naclinks">
+                            <div class="am-panel-hd dh-panel-hd">
+                                <h4 class="am-panel-title" data-am-collapse="{parent: '#asidenav', target:'#{{x.id}}'}" ng-click="aside_nav_h4_click($index)">{{x.title}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+        <!--边侧导航-end-->
+        <section class="am-u-md-9" id="right_frame">
+
+        </section>
+    </section>
+    <div class="zchq88-toolbar">
+        <a href="#zchq88-gundong-top" title="回到顶部" class="am-icon-btn am-icon-arrow-up am-active" id="amz-go-top"></a>
+        </br>
+        </br>
+        <a href="#menu-offcan" class="am-icon-btn am-icon-bars am-show-sm-only dh-sidebar-toggle" data-am-offcanvas=""><span class="am-sr-only">侧栏导航</span></a>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/polyfill/rem.min.js"></script>
+<script src="../assets/js/polyfill/respond.min.js"></script>
+<script src="../assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/amazeui.min.js"></script>
+    <!--<![endif]-->
+    <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
+    <script src="../assets/js/pym.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/my-angularjs/my-angularjs.js"></script>
+</body>
+
+</html>

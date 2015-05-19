@@ -24,22 +24,21 @@
          $scope.naclinks = [{
              title: "目录",
              id: "AsideNav1",
-             class: "am-in",
              childlinks: [
                  {
-                     href: "#zchq88-div1",
+                     href: "zchq88-div1",
                      title: "个人简介"
         },
                  {
-                     href: "#zchq88-div2",
+                     href: "zchq88-div2",
                      title: "个人技能"
         },
                  {
-                     href: "#zchq88-div3",
+                     href: "zchq88-div3",
                      title: "个人经历"
         },
                  {
-                     href: "#zchq88-div4",
+                     href: "zchq88-div4",
                      title: "自我评价"
         }, ]
      }];
