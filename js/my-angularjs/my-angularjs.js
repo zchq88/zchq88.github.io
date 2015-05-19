@@ -9,7 +9,7 @@ myapp.controller(
             $('html,body').animate({scrollTop: 0},1000);
         };
         $scope.naclinks = [{
-                title: "快速开始",
+                title: "1快速开始",
                 id: "Nav1",
                 url: "lesson1.html",
                 childlinks: [
@@ -27,7 +27,7 @@ myapp.controller(
         }, ]
      },
             {
-                title: "导言和准备",
+                title: "2导言和准备",
                 id: "Nav2",
                 url: "lesson2.html",
                 childlinks: [
@@ -38,6 +38,36 @@ myapp.controller(
                     {
                         href: "zchq88-gundong-n2d2",
                         title: "搭建学习环境"
+        }, ]
+     },
+            {
+                title: "3引导程序",
+                id: "Nav3",
+                url: "lesson3.html",
+                childlinks: [
+                    {
+                        href: "zchq88-gundong-n3d1",
+                        title: "开始"
+        },
+                    {
+                        href: "zchq88-gundong-n3d2",
+                        title: "代码在做什么呢？"
+        },
+                    {
+                        href: "zchq88-gundong-n3d3",
+                        title: "引导AngularJS应用？"
+        },
+                    {
+                        href: "zchq88-gundong-n3d4",
+                        title: "我工作目录中这些文件是干什么的？"
+        },
+                    {
+                        href: "zchq88-gundong-n3d5",
+                        title: "练习"
+        },
+                    {
+                        href: "zchq88-gundong-n3d6",
+                        title: "总结"
         }, ]
      }];
         $scope.Snaclinks = 0;
