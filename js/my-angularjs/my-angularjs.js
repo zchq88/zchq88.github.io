@@ -6,6 +6,7 @@ myapp.controller(
         $scope.aside_nav_h4_click = function (index) {
             pymParent.iframe.src = $scope.naclinks[index].url + "?initialWidth=750&childId=right_frame";
             $scope.Snaclinks = index;
+            $('html,body').animate({scrollTop: 0},1000);
         };
         $scope.naclinks = [{
                 title: "快速开始",
