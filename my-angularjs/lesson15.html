@@ -1,0 +1,414 @@
+<!doctype html>
+<html class="no-js" ng-app="myapp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>15 动画操作</title>
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+    <meta name="msapplication-TileColor" content="#0e90d2">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+  <link rel="canonical" href="http://www.example.com/">
+  -->
+
+    <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器。 请 <a
+  href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+    <div class="markdown-body">
+        <h2 id="zchq88-gundong-n15d1">动画操作</h2>
+        <p>最后一步，我们通过在之前创建的模板代码上方附加CSS和JavaScript动画来加强phonecat web应用。</p>
+        <ul>
+            <li>现在我们使用 <code>ngAnimate</code>模块来保证动画可以贯穿这个应用。</li>
+            <li>另外我们使用常用的<code>ng</code>指令来自动触发使动画接入的挂钩。</li>
+            <li>当发现一个动画之后，这个动画就会在标准的DOM操作之间运行，该操作在给定的时间中发布在元素上(如在<code>ngRepeat</code>上插入或删除节点或者在<code>ngClass</code>上添加或删除类)。</li>
+        </ul>
+        <p>工作区复位说明：</p>
+        <pre><code class="hljs nginx">    <span class="hljs-title">git</span> checkout -f step-<span class="hljs-number">11</span></code></pre>
+        <p>下面列出几种最重要的变化。你可以在 <a href="https://github.com/angular/angular-phonecat/compare/step-11...step-12">GitHub</a> 上浏览全部差异。</p>
+        <h2 id="zchq88-gundong-n15d2">依赖关系</h2>
+        <p>动画功能由<code>ngAniamte</code>模块中的Angular提供，它是从核心的Angular框架中分离出来的。另外，在这个项目中我们使用<code>jQuery</code>模块来完成其余的<code>JavaScript</code>动画。 我们使用的是
+            <a href="http://bower.io/">Bower</a>来安装客户端依赖关系。这一步更新<code>bower.json</code>配置文件来包含新的依赖关系：</p>
+        <pre><code class="hljs json">{
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"angular-seed"</span></span>,
+  "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"A starter project for AngularJS"</span></span>,
+  "<span class="hljs-attribute">version</span>": <span class="hljs-value"><span class="hljs-string">"0.0.0"</span></span>,
+  "<span class="hljs-attribute">homepage</span>": <span class="hljs-value"><span class="hljs-string">"https://github.com/angular/angular-seed"</span></span>,
+  "<span class="hljs-attribute">license</span>": <span class="hljs-value"><span class="hljs-string">"MIT"</span></span>,
+  "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+  "<span class="hljs-attribute">dependencies</span>": <span class="hljs-value">{
+    "<span class="hljs-attribute">angular</span>": <span class="hljs-value"><span class="hljs-string">"~1.3.0"</span></span>,
+    "<span class="hljs-attribute">angular-mocks</span>": <span class="hljs-value"><span class="hljs-string">"~1.3.0"</span></span>,
+    "<span class="hljs-attribute">bootstrap</span>": <span class="hljs-value"><span class="hljs-string">"~3.1.1"</span></span>,
+    "<span class="hljs-attribute">angular-route</span>": <span class="hljs-value"><span class="hljs-string">"~1.3.0"</span></span>,
+    "<span class="hljs-attribute">angular-resource</span>": <span class="hljs-value"><span class="hljs-string">"~1.3.0"</span></span>,
+    "<span class="hljs-attribute">jquery</span>": <span class="hljs-value"><span class="hljs-string">"~2.1.1"</span></span>,
+    "<span class="hljs-attribute">angular-animate</span>": <span class="hljs-value"><span class="hljs-string">"~1.3.0"</span>
+  </span>}
+</span>}</code></pre>
+        <ul>
+            <li><code>“angular-animate”：“~1.3.0”</code>意味着bower要安装与版本1.3.x兼容的angular-animate组件版本。</li>
+            <li><code>“jquery”：“2.1.1”</code>意味着bower要安装jQuery2.1.1版本。注意这不是Angular库，而是标准的jQuery库。我们可以使用bower来安装一个大范围的第三方库。</li>
+        </ul>
+        <p>我们必须要求bower来下载和安装这个依赖关系。通过运行下述程序来实现这一要求：</p>
+        <pre><code class="hljs sql">npm <span class="hljs-operator"><span class="hljs-keyword">install</span></span></code></pre>
+        <p>警告：如果你上次运行<code>npm install</code>后，一个新版本的Angular已经发布，那么由于需要安装的angular.js版本之间的冲突，你的<code>bower install</code>可能会遇到问题。如果你有这个问题，那么只需要在运行<code>npm install</code>之前，简单的删除你的<code>app/bower_components</code>文件夹。</p>
+        <p>注意：如果你在全局范围内安装bower，那么就可以运行 <code>bower instal</code>，但是对于这个项目来说，我们已经预配置了<code>npm install</code>来运行bower。</p>
+        <h2 id="zchq88-gundong-n15d3">在 ngAnimate 下动画是如何工作的</h2>
+        <p>想要了解在AngularJS下动画是如何工作的，请先阅读 <a href="https://docs.angularjs.org/guide/animations">AngularJS Animation Guide</a>。</p>
+        <h2 id="zchq88-gundong-n15d4">模板</h2>
+        <p>我们需要的带有HTML动画代码的更改是用来链接asset文件夹的，这些文件夹定义了动画和<code>angular-animate.js</code>文件。动画模块，即<code>ngAnimate</code>，由<code>angualr-animate.js</code>文件定义，包含了使您的应用程序成为动画意识的必要的代码。 以下是在索引文件中需要更改的：
+        </p>
+        <p><code>app/index.html.</code>
+        </p>
+        <pre><code class="hljs xml">...
+  <span class="hljs-comment">&lt;!-- for CSS Transitions and/or Keyframe Animations --&gt;</span>  
+  <span class="hljs-tag">&lt;<span class="hljs-title">link</span> <span class="hljs-attribute">rel</span>=<span class="hljs-value">"stylesheet"</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"css/animations.css"</span>&gt;</span>
+
+  ...
+
+  <span class="hljs-comment">&lt;!-- jQuery is used for JavaScript animations (include this before angular.js) --&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"bower_components/jquery/dist/jquery.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+
+  ...
+
+  <span class="hljs-comment">&lt;!-- required module to enable animation support in AngularJS --&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"bower_components/angular-animate/angular-animate.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+
+  <span class="hljs-comment">&lt;!-- for JavaScript Animations --&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"js/animations.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+
+...</code></pre>
+        <p><strong>重要</strong>：当使用Angular 1.3时，请确保使用jQuery版本2.1或更新的版本；jQuery 1.x官网不在支持。要确保加载 jQuery在所有AngularJS 脚本之前，否则AngularJS不会检测jQuery，并且动画也不会像预期的那样起作用。 现在可以在CSS代码(
+            <code>animations.css</code>)和JavaScript代码(<code>animations.js</code>)中创建动画。但是在开始之前，让我们创建一个新的模块，该模块使用ngAnimate模块作为依赖，这就像我们之前使用<code>ngResource</code>一样。</p>
+        <h2 id="zchq88-gundong-n15d5">模块与动画</h2>
+        <p><code>app/js/animations.js</code>.</p>
+        <pre><code class="hljs javascript">angular.module(<span class="hljs-string">'phonecatAnimations'</span>, [<span class="hljs-string">'ngAnimate'</span>]);
+<span class="hljs-comment">// ...</span>
+<span class="hljs-comment">// this module will later be used to define animations</span>
+<span class="hljs-comment">// ...</span></code></pre>
+        <p>现在让我们将这个模块附加到应用模块中…</p>
+        <p><code>app/js/app.js</code>.</p>
+        <pre><code class="hljs javascript"><span class="hljs-comment">// ...</span>
+angular.module(<span class="hljs-string">'phonecatApp'</span>, [
+  <span class="hljs-string">'ngRoute'</span>,
+
+  <span class="hljs-string">'phonecatAnimations'</span>,
+  <span class="hljs-string">'phonecatControllers'</span>,
+  <span class="hljs-string">'phonecatFilters'</span>,
+  <span class="hljs-string">'phonecatServices'</span>,
+]);
+<span class="hljs-comment">// ...</span></code></pre>
+        <p>现在，phonecat模块是动画意识的。让我们做一些动画吧！</p>
+        <h2 id="zchq88-gundong-n15d6">用 CSS 过渡动画实现动画的 ngRepeat</h2>
+        <p>我们通过把CSS过渡动画添加到<code>ngRepeat</code>指令呈现在<code>phone-list.html</code>页面上开始。首先，在重复的元素中添加一个额外的CSS类，这样我们可以用CSS动画代码来与它连接。</p>
+        <p><code>app/partials/phone-list.html</code>.</p>
+        <pre><code class="hljs xml">    <span class="hljs-comment">&lt;!--
+      Let's change the repeater HTML to include a new CSS class
+      which we will later use for animations:
+    --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">ul</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"phones"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">li</span> <span class="hljs-attribute">ng-repeat</span>=<span class="hljs-value">"phone in phones | filter:query | orderBy:orderProp"</span>
+          <span class="hljs-attribute">class</span>=<span class="hljs-value">"thumbnail phone-listing"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#/phones/{{phone.id}}"</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"thumb"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">ng-src</span>=<span class="hljs-value">"{{phone.imageUrl}}"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">a</span> <span class="hljs-attribute">href</span>=<span class="hljs-value">"#/phones/{{phone.id}}"</span>&gt;</span>{{phone.name}}<span class="hljs-tag">&lt;/<span class="hljs-title">a</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>{{phone.snippet}}<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">ul</span>&gt;</span></code></pre>
+        <p>注意到怎样添加<code>phone-listing</code> CSS类了吗？这就是我们需要的在HTML代码中使动画起作用的全部东西。</p>
+        <p>以下是实际的CSS 过渡动画代码：
+            <code>app/css/animations.css</code>
+        </p>
+        <pre><code class="hljs css"><span class="hljs-class">.phone-listing</span><span class="hljs-class">.ng-enter</span>,
+<span class="hljs-class">.phone-listing</span><span class="hljs-class">.ng-leave</span>,
+<span class="hljs-class">.phone-listing</span><span class="hljs-class">.ng-move</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">-webkit-transition</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> linear all</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">-moz-transition</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> linear all</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">-o-transition</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> linear all</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">transition</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> linear all</span></span>;
+}</span>
+
+<span class="hljs-class">.phone-listing</span><span class="hljs-class">.ng-enter</span>,
+<span class="hljs-class">.phone-listing</span><span class="hljs-class">.ng-move</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">overflow</span>:<span class="hljs-value"> hidden</span></span>;
+}</span>
+
+<span class="hljs-class">.phone-listing</span><span class="hljs-class">.ng-move</span><span class="hljs-class">.ng-move-active</span>,
+<span class="hljs-class">.phone-listing</span><span class="hljs-class">.ng-enter</span><span class="hljs-class">.ng-enter-active</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">1</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"> <span class="hljs-number">120px</span></span></span>;
+}</span>
+
+<span class="hljs-class">.phone-listing</span><span class="hljs-class">.ng-leave</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">1</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">overflow</span>:<span class="hljs-value"> hidden</span></span>;
+}</span>
+
+<span class="hljs-class">.phone-listing</span><span class="hljs-class">.ng-leave</span><span class="hljs-class">.ng-leave-active</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">padding-top</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">padding-bottom</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>;
+}</span></code></pre>
+        <p>正如你所见到的，<code>phone-listing</code> CSS类与动画钩相结合，当列表中有项目被插入或者移出的时候，动画钩就会出现。</p>
+        <ul>
+            <li>ng-enter类应用于元素中，当一个新的phone添加到列表中并呈现在页面上。</li>
+            <li>ng-move类应用于列表中项目的移动。</li>
+            <li>ng-leave类应用于列表中项目删除。</li>
+        </ul>
+        <p>phone listing项目的添加和删除取决于传给<code>ng-repeat</code>属性的数据。例如，若过滤数据改变了，项目就会动画地加入到repeat列表中或从repeat列表中动画地去除。 一些重要的声明，当动画出现时，两组CSS类会被添加到元素中：
+        </p>
+        <ol>
+            <li>
+                <p>“starting”类在动画开始时表明风格</p>
+            </li>
+            <li>“active”类在动画结束时表明风格</li>
+        </ol>
+        <p>starting类的名称是被激发事件的名称(如<code>enter</code>，<code>move</code> 或<code>leave</code>)，带有ng -前缀。所以一个<code>enter</code>事件将产生一个称为<code>ng-enter</code>的类。 active类名与starting类名相似，但带有一个
+            <code>-active</code>的后缀。这两类CSS命名约定允许开发人员制作动画，自始至终。</p>
+        <p>在上面的例子中,当添加或删除项目时，元素从<strong>0</strong>到<strong>120像素</strong>的高度扩展,在从列表中删除项目之前，元素使项目崩溃。还有一个漂亮的淡入和淡出效果也在同时发生。所有的这些都是由上述示例代码顶部的CSS过渡声明操作的。</p>
+        <p>尽管大多数现代的浏览器为<a href="http://caniuse.com/#feat=css-transitions">CSS过渡</a>和CSS动画<a href="http://caniuse.com/#feat=css-animation">CSS动画</a>提供了很好的支持，但是IE9和更早的浏览器却没有。如果你想使动画与更早的浏览器兼容，考虑使用基于JavaScript的动画，下面会具体介绍。</p>
+        <h2 id="zchq88-gundong-n15d7">用 CSS 关键帧动画实现动画的 ngView</h2>
+        <p>接下来，让我们在<code>ngView</code>中的路径更改之间为过渡添加动画。</p>
+        <p>首先，像上述例子一样，在HTML中添加一个新的CSS类。这一次，不是<code>ng-repeat</code>元素，而是添加包含<code>ng-view</code>指令的元素。为了实现这个，我们必须在HTML代码中做一些小小的改变，以使得在view改变中我们对动画有更多的控制。</p>
+        <p><code>app/index.html.</code>
+        </p>
+        <pre><code class="hljs xml"> <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"view-container"</span>&gt;</span>
+   <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">ng-view</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"view-frame"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+ <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span></code></pre>
+        <p>通过这个改变,<code>ng-view</code>指令是嵌套在一个带有<code>view-container</code> CSS类的父元素中。这个类添加了一个<code>position:relative</code>样式，所以定位<code>ng-view</code>是相对于父元素的，因为它模拟转换。</p>
+        <p>这里，让我们为这动画过渡将这个CSS类添加到<code>animations.css</code>文件:</p>
+        <p><code>app/css/animations.css</code>.</p>
+        <pre><code class="hljs css"><span class="hljs-class">.view-container</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">position</span>:<span class="hljs-value"> relative</span></span>;
+}</span>
+
+<span class="hljs-class">.view-frame</span><span class="hljs-class">.ng-enter</span>, <span class="hljs-class">.view-frame</span><span class="hljs-class">.ng-leave</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">background</span>:<span class="hljs-value"> white</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">position</span>:<span class="hljs-value"> absolute</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">top</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">left</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">right</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>;
+}</span>
+
+<span class="hljs-class">.view-frame</span><span class="hljs-class">.ng-enter</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">-webkit-animation</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> fade-in</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">-moz-animation</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> fade-in</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">-o-animation</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> fade-in</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">animation</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> fade-in</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">z-index</span>:<span class="hljs-value"> <span class="hljs-number">100</span></span></span>;
+}</span>
+
+<span class="hljs-class">.view-frame</span><span class="hljs-class">.ng-leave</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">-webkit-animation</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> fade-out</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">-moz-animation</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> fade-out</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">-o-animation</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> fade-out</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">animation</span>:<span class="hljs-value"> <span class="hljs-number">0.5s</span> fade-out</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">z-index</span>:<span class="hljs-value"><span class="hljs-number">99</span></span></span>;
+}</span>
+
+<span class="hljs-at_rule">@<span class="hljs-keyword">keyframes</span> fade-in </span>{
+  <span class="hljs-tag">from</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>; }</span>
+  <span class="hljs-tag">to</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">1</span></span></span>; }</span>
+}
+<span class="hljs-at_rule">@<span class="hljs-keyword">-moz-keyframes</span> fade-in </span>{
+  <span class="hljs-tag">from</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>; }</span>
+  <span class="hljs-tag">to</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">1</span></span></span>; }</span>
+}
+<span class="hljs-at_rule">@<span class="hljs-keyword">-webkit-keyframes</span> fade-in </span>{
+  <span class="hljs-tag">from</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>; }</span>
+  <span class="hljs-tag">to</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">1</span></span></span>; }</span>
+}
+
+<span class="hljs-at_rule">@<span class="hljs-keyword">keyframes</span> fade-out </span>{
+  <span class="hljs-tag">from</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">1</span></span></span>; }</span>
+  <span class="hljs-tag">to</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>; }</span>
+}
+<span class="hljs-at_rule">@<span class="hljs-keyword">-moz-keyframes</span> fade-out </span>{
+  <span class="hljs-tag">from</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">1</span></span></span>; }</span>
+  <span class="hljs-tag">to</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>; }</span>
+}
+<span class="hljs-at_rule">@<span class="hljs-keyword">-webkit-keyframes</span> fade-out </span>{
+  <span class="hljs-tag">from</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">1</span></span></span>; }</span>
+  <span class="hljs-tag">to</span> <span class="hljs-rules">{ <span class="hljs-rule"><span class="hljs-attribute">opacity</span>:<span class="hljs-value"> <span class="hljs-number">0</span></span></span>; }</span>
+}
+
+<span class="hljs-comment">/* don't forget about the vendor-prefixes! */</span></code></pre>
+        <p>这里没有什么出乎意料的!只是一个简单的页面之间的淡入和淡出效果。这里的唯一不寻常的是,在页面之间实现软切换动画时，我们在前一页(有<code>ng-leave</code>类的页面)的上方使用绝对定位来定位下一个页面(通过<code>ng-enter</code>识别)。这样前一页即将被删除时,它逐渐消失而新的页面逐渐出现在它上面。</p>
+        <p>一旦离开动画结束元素被移除，一旦进入动画完成时，<code>ng-enter</code>和<code>ng-enter-active</code> CSS类从元素中被移除，使其rerender和重新定位其默认CSS代码(所以一旦动画结束，没有绝对定位)。这运作起来非常流畅,使得页面在路径变化中自然流动，不会有任何东西跳动。</p>
+        <p>应用的CSS类(开始和结束类)与<code>ng-repeat</code>大体相同。每次加载一个新页面，<code>ng-view</code>指令将创建自身的一个副本,下载模板并且附加内容。这将确保所有的视图都包含在一个单独的HTML元素中,该元素允许简单的动画控制。</p>
+        <p>更多关于 CSS 动画，请看 <a href="https://docs.webplatform.org/wiki/css/properties/animations">Web Platform documentation</a>。</p>
+        <h2 id="zchq88-gundong-n15d8">用JavaScript 实现动画的 <code>ngClass</code></h2>
+        <p>让我们在应用程序中添加另一个动画。切换到<code>phone-detail.html</code>页面,我们看到,我们有一个不错的缩略图交换程序。通过点击页面上列出的缩略图,这个手机图片改变了。但我们怎样才能改变这些添加动画?</p>
+        <p>让我们先考虑一下。基本上,当你点击缩略图,你正在改变图像的状态来反映新选中的缩略图。HTML内来指定状态改变的最好办法是使用类。像之前一样,我们如何使用CSS类指定一个动画,这一次每当CSS类自身变化时，动画就会出现。</p>
+        <p>每当一个新的手机缩略图被选中时，状态改变，<code>.active</code> CSS类添加到匹配的图像中，动画出现。</p>
+        <p>首先让我们对<code>phone-detail.html</code>页面上的 HTML代码稍作调整。请注意,我们已经改变了显示大图的方式:</p>
+        <p><code>app/partials/phone-detail.html</code>.</p>
+        <pre><code class="hljs xml">
+    <span class="hljs-comment">&lt;!-- We're only changing the top of the file --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"phone-images"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">ng-src</span>=<span class="hljs-value">"{{img}}"</span>
+           <span class="hljs-attribute">class</span>=<span class="hljs-value">"phone"</span>
+           <span class="hljs-attribute">ng-repeat</span>=<span class="hljs-value">"img in phone.images"</span>
+           <span class="hljs-attribute">ng-class</span>=<span class="hljs-value">"{active:mainImageUrl==img}"</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-title">h1</span>&gt;</span>{{phone.name}}<span class="hljs-tag">&lt;/<span class="hljs-title">h1</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>{{phone.description}}<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+
+    <span class="hljs-tag">&lt;<span class="hljs-title">ul</span> <span class="hljs-attribute">class</span>=<span class="hljs-value">"phone-thumbs"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">li</span> <span class="hljs-attribute">ng-repeat</span>=<span class="hljs-value">"img in phone.images"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">ng-src</span>=<span class="hljs-value">"{{img}}"</span> <span class="hljs-attribute">ng-mouseenter</span>=<span class="hljs-value">"setImage(img)"</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">li</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">ul</span>&gt;</span></code></pre>
+        <p>就像缩略图,我们使用一个中继器来显示所有的图片，这些图片作为一个列表。然而我们不是使任何repeat-related动画来产生动作。相反,我们关注ng-class指令因为若<code>active</code>类是正确的,那么它将被应用到元素中并且是可见的。否则,图像是隐藏的。在我们的例子中,总有一个元素有active类，,因此,总会有一个手机图片在屏幕上可见。</p>
+        <p>当活跃类添加到元素中, 在给AngularJS信号使它发射一个动画之前，<code>active-add</code>类和<code>active-add-active</code>类被添加。当活跃类被删除时,<code>active-remove</code>类和<code>active-remove-active</code>类应用于元素，该元素会反过来触发另一个动画。</p>
+        <p>确保手机图片在第一次加载页面时正确显示,我们也调整细节页面的CSS样式:</p>
+        <p><code>app/css/app.css</code>
+        </p>
+        <pre><code class="hljs css"><span class="hljs-class">.phone-images</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">background-color</span>:<span class="hljs-value"> white</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">width</span>:<span class="hljs-value"> <span class="hljs-number">450px</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"> <span class="hljs-number">450px</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">overflow</span>:<span class="hljs-value"> hidden</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">position</span>:<span class="hljs-value"> relative</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">float</span>:<span class="hljs-value"> left</span></span>;
+}</span>
+
+...
+
+<span class="hljs-tag">img</span><span class="hljs-class">.phone</span> <span class="hljs-rules">{
+  <span class="hljs-rule"><span class="hljs-attribute">float</span>:<span class="hljs-value"> left</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">margin-right</span>:<span class="hljs-value"> <span class="hljs-number">3em</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">margin-bottom</span>:<span class="hljs-value"> <span class="hljs-number">2em</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">background-color</span>:<span class="hljs-value"> white</span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">padding</span>:<span class="hljs-value"> <span class="hljs-number">2em</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">height</span>:<span class="hljs-value"> <span class="hljs-number">400px</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">width</span>:<span class="hljs-value"> <span class="hljs-number">400px</span></span></span>;
+  <span class="hljs-rule"><span class="hljs-attribute">display</span>:<span class="hljs-value"> none</span></span>;
+}</span>
+
+<span class="hljs-rule"><span class="hljs-attribute">img.phone</span>:<span class="hljs-value">first-child {
+  display: block</span></span>;
+  }</code></pre>
+        <p>你可能会想,我们只是要创建另一个CSS-enabled动画。虽然我们可以那样做,但是让我们抓住机会来学习如何使用<code>animation()</code>模块来创建javascript-enabled动画的方法。</p>
+        <p><code>app/js/animations.js</code>.</p>
+        <pre><code class="hljs javascript"><span class="hljs-keyword">var</span> phonecatAnimations = angular.module(<span class="hljs-string">'phonecatAnimations'</span>, [<span class="hljs-string">'ngAnimate'</span>]);
+
+phonecatAnimations.animation(<span class="hljs-string">'.phone'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+
+  <span class="hljs-keyword">var</span> animateUp = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(element, className, done)</span> </span>{
+    <span class="hljs-keyword">if</span>(className != <span class="hljs-string">'active'</span>) {
+      <span class="hljs-keyword">return</span>;
+    }
+    element.css({
+      position: <span class="hljs-string">'absolute'</span>,
+      top: <span class="hljs-number">500</span>,
+      left: <span class="hljs-number">0</span>,
+      display: <span class="hljs-string">'block'</span>
+    });
+
+    jQuery(element).animate({
+      top: <span class="hljs-number">0</span>
+    }, done);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(cancel)</span> </span>{
+      <span class="hljs-keyword">if</span>(cancel) {
+        element.stop();
+      }
+    };
+  }
+
+  <span class="hljs-keyword">var</span> animateDown = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(element, className, done)</span> </span>{
+    <span class="hljs-keyword">if</span>(className != <span class="hljs-string">'active'</span>) {
+      <span class="hljs-keyword">return</span>;
+    }
+    element.css({
+      position: <span class="hljs-string">'absolute'</span>,
+      left: <span class="hljs-number">0</span>,
+      top: <span class="hljs-number">0</span>
+    });
+
+    jQuery(element).animate({
+      top: -<span class="hljs-number">500</span>
+    }, done);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(cancel)</span> </span>{
+      <span class="hljs-keyword">if</span>(cancel) {
+        element.stop();
+      }
+    };
+  }
+
+  <span class="hljs-keyword">return</span> {
+    addClass: animateUp,
+    removeClass: animateDown
+  };
+});</code></pre>
+        <p>注意,我们使用 <a href="http://jquery.com/">jQuery</a> 来实现动画。有了AngularJS，jQuery不要求做JavaScript动画,但是我们要用它,因为编写自己的JavaScript动画库已经超出了本教程的范围。更多关于jQuery.animate，看 <a href="http://api.jquery.com/animate/">jQuery documentation</a>。 当在元素中添加或删除一个类时，使用
+            <code>addClass</code>和<code>removeClass</code>回调函数，该元素包含我们注册的类，这是在这种情况下<code>.phone</code>。当。活跃的类添加到元素(通过<code>ng-class</code>指令)theaddClass JavaScript回调将发射元素作为参数传递给回调。传入的最后一个参数是<code>done</code>回调函数。done回调函数的作用是,通过调用该函数，可以使Angular知道JavaScript动画结束。</p>
+        <p><code>removeClass</code>回调以同样的方式工作,当从元素中国移除一个类时得到触发。</p>
+        <p>在JavaScript回调中,通过操纵DOM创建动画。在上面的代码中,这是<code>element.css()</code>和<code>element.animate()</code>所做的。回调用一个500像素的偏移量定位下一个元素的位置，并通过把每个项目上移<code>500像素</code>来定位之前的动画以及新的项目。这产生一个像动画一样的传送带。当<code>animate</code>函数完成后,调用<code>done</code>。</p>
+        <p>注意<code>addClass</code>和<code>removeClass</code>每个返回一个函数。这是一个可选的函数,当动画消失时(当另一个动画在相同的元素中替代) 以及动画完成后，可以被调用。一个布尔参数传递到函数中，可以让开发人员知道动画是否被取消了。当动画结束时，这个函数可以用来做任何必要的清理工作。</p>
+        <h2 id="zchq88-gundong-n15d9">总结</h2>
+        <p>现在你学会了！我们已经在一个相对短的时间内创建了一个web应用程序。</p>
+        <h1>完结篇 - The End</h1>
+        <p>我们的应用现在完成了。你可以随意练习这些代码，用 <code>git checkout</code> 或者 <code>goto_step.sh</code> 命令切换到之前的步骤。</p>
+        <p>对于更多我们在教程部分提及的细节以及 AngularJS 理论的例子，你可以在 <a href="https://docs.angularjs.org/guide/">开发指南 - Developer Guide</a> 中找到。</p>
+        <p>当你准备好使用 AngularJS 创建一个新项目时，我们推荐使用 <a href="https://github.com/angular/angular-seed">angular-seed</a> 项目来引导你的开发。</p>
+        <p>我们希望这篇教程对你有用，让你对 AngularJS 有了足够的了解，并且愿意对其进行更加深入的学习。我们特别期待着你能够开发出自己的 AngularJS 应用，或者让你对 AngularJS <a href="http://docs.angularjs.org/misc/contribute">贡献代码</a> 产生兴趣。</p>
+        <p>如果你有什么问题、反馈或是想跟我们打个招呼，直接向 <a href="https://groups.google.com/forum/#!forum/angular">https://groups.google.com/forum/#!forum/angular</a> 发消息吧！</p>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/polyfill/rem.min.js"></script>
+<script src="../assets/js/polyfill/respond.min.js"></script>
+<script src="../assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/amazeui.min.js"></script>
+    <!--<![endif]-->
+    <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
+    <script src="../assets/js/pym.js"></script>
+    <script src="../assets/js/pym-child.js"></script>
+    <script src="../js/base.js"></script>
+</body>
+
+</html>

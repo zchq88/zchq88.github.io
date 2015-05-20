@@ -1,3 +1,3 @@
-pym.Child({
+var pymChild=pym.Child({
     polling: 500
 });

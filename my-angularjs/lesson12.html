@@ -1,0 +1,192 @@
+<!doctype html>
+<html class="no-js" ng-app="myapp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>12 过滤器</title>
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+    <meta name="msapplication-TileColor" content="#0e90d2">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+  <link rel="canonical" href="http://www.example.com/">
+  -->
+
+    <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器。 请 <a
+  href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+    <div class="post-text">
+       <h2 id="zchq88-gundong-n12d1">过滤器</h2>
+        <p>在这一步你将学习到如何创建自己的显示过滤器。</p>
+
+        <p>请重置工作目录：</p>
+
+        <pre class="prettyprint"><code><span class="pln">git checkout </span><span class="pun">-</span><span class="pln">f step</span><span class="pun">-</span><span class="lit">9</span></code></pre>
+
+        <p>现在转到一个手机详细信息页面。在上一步，手机详细页面显示“true”或者“false”来说明某个手机是否具有特定的特性。现在我们使用一个定制的过滤器来把那些文本串图形化：√作为“true”；以及×作为“false”。来让我们看看过滤器代码长什么样子。</p>
+
+        <p>步骤8和步骤9之间最重要的不同在下面列出。你可以在<a href="https://github.com/angular/angular-phonecat/compare/step-8...step-9">GitHub</a>里看到完整的差别。</p>
+
+        <h3>定制过滤器</h3>
+
+        <p>为了创建一个新的过滤器，先创建一个<code>phonecatFilters</code>模块，并且将定制的过滤器注册给这个模块。</p>
+
+        <p><strong>app/js/filters.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pln">angular</span><span class="pun">.</span><span class="kwd">module</span><span class="pun">(</span><span class="str">'phonecatFilters'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[]).</span><span class="pln">filter</span><span class="pun">(</span><span class="str">'checkmark'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  </span><span class="kwd">return</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">input</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> input </span><span class="pun">?</span><span class="pln"> </span><span class="str">'\u2713'</span><span class="pln"> </span><span class="pun">:</span><span class="pln"> </span><span class="str">'\u2718'</span><span class="pun">;</span><span class="pln">
+  </span><span class="pun">};</span><span class="pln">
+</span><span class="pun">});</span></code></pre>
+
+        <p>我们的过滤器命名为<strong>checkmark</strong>。它的输入要么是<code>true</code>，要么是<code>false</code>，并且我们返回两个表示true或false的unicode字符（<code>\u2713和\u2718</code>）。</p>
+
+        <p>现在我们的过滤器准备好了，我们需要将我们的<code>phonecatFilters</code>模块作为一个依赖注册到我们的主模块<code>phonecat</code>上。</p>
+
+        <p><strong>app/js/app/js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+angular</span><span class="pun">.</span><span class="kwd">module</span><span class="pun">(</span><span class="str">'phonecat'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="str">'phonecatFilters'</span><span class="pun">]).</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+
+        <h3>模板</h3>
+
+        <p>由于我们的模板代码写在<code>app/js/filter.js</code>文件中，所以我们需要在布局模板中引入这个文件。</p>
+
+        <p><strong>app/index.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+ </span><span class="pun">&lt;</span><span class="pln">script src</span><span class="pun">=</span><span class="str">"js/controllers.js"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln">
+ </span><span class="pun">&lt;</span><span class="pln">script src</span><span class="pun">=</span><span class="str">"js/filters.js"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+
+        <p>在AngularJS模板中使用过滤器的语法是：</p>
+
+        <pre class="prettyprint"><code><span class="pun">{{</span><span class="pln"> expression </span><span class="pun">|</span><span class="pln"> filter </span><span class="pun">}}</span></code></pre>
+
+        <p>我们把过滤器应用到手机详细信息模板中：</p>
+
+        <p><strong>app/partials/phone-detail.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+    </span><span class="str">&lt;dl&gt;</span><span class="pln">
+      </span><span class="str">&lt;dt&gt;</span><span class="typ">Infrared</span><span class="pun">&lt;</span><span class="str">/dt&gt;
+      &lt;dd&gt;{{phone.connectivity.infrared | checkmark}}&lt;/</span><span class="pln">dd</span><span class="pun">&gt;</span><span class="pln">
+      </span><span class="str">&lt;dt&gt;</span><span class="pln">GPS</span><span class="pun">&lt;</span><span class="str">/dt&gt;
+      &lt;dd&gt;{{phone.connectivity.gps | checkmark}}&lt;/</span><span class="pln">dd</span><span class="pun">&gt;</span><span class="pln">
+    </span><span class="pun">&lt;/</span><span class="pln">dl</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+
+        <h3>测试</h3>
+
+        <p>过滤器和其他组件一样，应该被测试，并且这些测试实际上很容易完成。</p>
+
+        <p><strong>test/unit/filtersSpec.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pln">describe</span><span class="pun">(</span><span class="str">'filter'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+
+  beforeEach</span><span class="pun">(</span><span class="kwd">module</span><span class="pun">(</span><span class="str">'phonecatFilters'</span><span class="pun">));</span><span class="pln">
+
+
+  describe</span><span class="pun">(</span><span class="str">'checkmark'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+
+    it</span><span class="pun">(</span><span class="str">'should convert boolean values to unicode checkmark or cross'</span><span class="pun">,</span><span class="pln">
+        inject</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">checkmarkFilter</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">checkmarkFilter</span><span class="pun">(</span><span class="kwd">true</span><span class="pun">)).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'\u2713'</span><span class="pun">);</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">checkmarkFilter</span><span class="pun">(</span><span class="kwd">false</span><span class="pun">)).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'\u2718'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}));</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">});</span></code></pre>
+
+        <p>注意在执行任何过滤器测试之前，你需要为<code>phonecatFilters</code>模块配置我们的测试注入器。</p>
+
+        <p>执行<code>./scripts/test/sh</code>运行测试，你应该会看到如下的输出：</p>
+
+        <pre class="prettyprint"><code><span class="typ">Chrome</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Runner</span><span class="pln"> reset</span><span class="pun">.</span><span class="pln">
+</span><span class="pun">....</span><span class="pln">
+</span><span class="typ">Total</span><span class="pln"> </span><span class="lit">4</span><span class="pln"> tests </span><span class="pun">(</span><span class="typ">Passed</span><span class="pun">:</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Fails</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Errors</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">(</span><span class="lit">3.00</span><span class="pln"> ms</span><span class="pun">)</span><span class="pln">
+  </span><span class="typ">Chrome</span><span class="pln"> </span><span class="lit">19.0</span><span class="pun">.</span><span class="lit">1084.36</span><span class="pln"> </span><span class="typ">Mac</span><span class="pln"> OS</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Run</span><span class="pln"> </span><span class="lit">4</span><span class="pln"> tests </span><span class="pun">(</span><span class="typ">Passed</span><span class="pun">:</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Fails</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Errors</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">(</span><span class="lit">3.00</span><span class="pln"> ms</span><span class="pun">)</span></code></pre>
+
+        <h2 id="zchq88-gundong-n12d2">练习</h2>
+
+        <ul>
+            <li>
+                <p>现在让我们来练习一下<a href="http://code.angularjs.org/1.1.0/docs/api/ng.%24filter" target="_blank">AngularJS内置过滤器</a>，在<strong>index.html</strong>中加入如下绑定：</p>
+
+                <ul>
+                    <li><code>{{ "lower cap string" | uppercase }}</code>
+                    </li>
+                    <li><code>{{ {foo: "bar", baz: 23} | json }}</code>
+                    </li>
+                    <li><code>{{ 1304375948024 | date }}</code>
+                    </li>
+                    <li><code>{{ 1304375948024 | date:"MM/dd/yyyy @ h:mma" }}</code>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p>我们也可以用一个输入框来创建一个模型，并且将之与一个过滤后的绑定结合在一起。在<strong>index.html</strong>中加入如下代码：</p>
+
+                <pre class="prettyprint"><code><span class="tag">&lt;input</span><span class="pln"> </span><span class="atn">ng-model</span><span class="pun">=</span><span class="atv">"userInput"</span><span class="tag">&gt;</span><span class="pln"> Uppercased: {{ userInput | uppercase }}</span></code></pre>
+            </li>
+        </ul>
+
+        <h2 id="zchq88-gundong-n12d3">总结</h2>
+
+        <p>现在你已经知道了如何编写和测试一个定制化插件，在<a href="#" onclick="pymChild.sendMessage('href',12)">事件处理器</a>中我们会学习如何用AngularJS继续丰富我们的手机详细信息页面。</p>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/polyfill/rem.min.js"></script>
+<script src="../assets/js/polyfill/respond.min.js"></script>
+<script src="../assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/amazeui.min.js"></script>
+    <!--<![endif]-->
+    <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
+    <script src="../assets/js/pym.js"></script>
+    <script src="../assets/js/pym-child.js"></script>
+    <script src="../js/base.js"></script>
+</body>
+
+</html>

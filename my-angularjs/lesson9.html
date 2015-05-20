@@ -1,0 +1,142 @@
+<!doctype html>
+<html class="no-js" ng-app="myapp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>9 链接与图片模板</title>
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+    <meta name="msapplication-TileColor" content="#0e90d2">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+  <link rel="canonical" href="http://www.example.com/">
+  -->
+
+    <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器。 请 <a
+  href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+    <div class="post-text">
+       <h2 id="zchq88-gundong-n9d1">9 链接与图片模板</h2>
+        <p>这一步，你会为手机列表的手机添加缩略图以及一些链接，不过这些链接还不会起作用。接下来你会使用这些链接来分类显示手机的额外信息。</p>
+
+        <p>请重置工作目录：</p>
+
+        <pre class="prettyprint"><code><span class="pln">git checkout </span><span class="pun">-</span><span class="pln">f step</span><span class="pun">-</span><span class="lit">6</span></code></pre>
+
+        <p>现在你应该能够看到列表里面手机的图片和链接了。</p>
+
+        <p>步骤5和步骤6之间最重要的不同在下面列出。你可以在<a href="https://github.com/angular/angular-phonecat/compare/step-5...step-6">GitHub</a>里看到完整的差别。</p>
+
+        <h3>数据</h3>
+
+        <p>注意到现在<code>phones.json</code>文件包含了唯一标识符和每一部手机的图像链接。这些url现在指向<code>app/img/phones/</code>目录。</p>
+
+        <p><strong>app/phones/phones.json</strong>（样例片段）</p>
+
+        <pre class="prettyprint"><code><span class="pun">[</span><span class="pln">
+ </span><span class="pun">{</span><span class="pln">
+  </span><span class="pun">...</span><span class="pln">
+  </span><span class="str">"id"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"motorola-defy-with-motoblur"</span><span class="pun">,</span><span class="pln">
+  </span><span class="str">"imageUrl"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"img/phones/motorola-defy-with-motoblur.0.jpg"</span><span class="pun">,</span><span class="pln">
+  </span><span class="str">"name"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Motorola DEFY\u2122 with MOTOBLUR\u2122"</span><span class="pun">,</span><span class="pln">
+  </span><span class="pun">...</span><span class="pln">
+ </span><span class="pun">},</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">
+</span><span class="pun">]</span></code></pre>
+
+        <h3>模板</h3>
+
+        <p><strong>app/index.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+        </span><span class="pun">&lt;</span><span class="pln">ul </span><span class="kwd">class</span><span class="pun">=</span><span class="str">"phones"</span><span class="pun">&gt;</span><span class="pln">
+          </span><span class="pun">&lt;</span><span class="pln">li ng</span><span class="pun">-</span><span class="pln">repeat</span><span class="pun">=</span><span class="str">"phone in phones | filter:query | orderBy:orderProp"</span><span class="pln"> </span><span class="kwd">class</span><span class="pun">=</span><span class="str">"thumbnail"</span><span class="pun">&gt;</span><span class="pln">
+            </span><span class="pun">&lt;</span><span class="pln">a href</span><span class="pun">=</span><span class="str">"#/phones/{{phone.id}}"</span><span class="pln"> </span><span class="kwd">class</span><span class="pun">=</span><span class="str">"thumb"</span><span class="pun">&gt;&lt;</span><span class="pln">img ng</span><span class="pun">-</span><span class="pln">src</span><span class="pun">=</span><span class="str">"{{phone.imageUrl}}"</span><span class="pun">&gt;&lt;/</span><span class="pln">a</span><span class="pun">&gt;</span><span class="pln">
+            </span><span class="pun">&lt;</span><span class="pln">a href</span><span class="pun">=</span><span class="str">"#/phones/{{phone.id}}"</span><span class="pun">&gt;{{</span><span class="pln">phone</span><span class="pun">.</span><span class="pln">name</span><span class="pun">}}&lt;/</span><span class="pln">a</span><span class="pun">&gt;</span><span class="pln">
+            </span><span class="str">&lt;p&gt;</span><span class="pun">{{</span><span class="pln">phone</span><span class="pun">.</span><span class="pln">snippet</span><span class="pun">}}&lt;/</span><span class="pln">p</span><span class="pun">&gt;</span><span class="pln">
+          </span><span class="pun">&lt;</span><span class="str">/li&gt;
+        &lt;/</span><span class="pln">ul</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+
+        <p>这些链接将来会指向每一部电话的详细信息页。不过现在为了产生这些链接，我们在<code>href</code>属性里面使用我们早已熟悉的双括号数据绑定。在步骤2，我们添加了<code>{{phone.name}}</code>绑定作为元素内容。在这一步，我们在元素属性中使用<code>{{phone.id}}</code>绑定。</p>
+
+        <p>我们同样为每条记录添加手机图片，只需要使用<a href="http://code.angularjs.org/1.1.0/docs/api/ng.directive%3angSrc" target="_blank">ngSrc</a>指令代替<code>&lt;img&gt;</code>的<code>src</code>属性标签就可以了。如果我们仅仅用一个正常<code>src</code>属性来进行绑定（<code>&lt;img class="diagram" src="{{phone.imageUrl}}"&gt;</code>），浏览器会把AngularJS的<code>{{ 表达式 }}</code>标记直接进行字面解释，并且发起一个向非法url<code>http://localhost:8000/app/{{phone.imageUrl}}</code>的请求。因为浏览器载入页面时，同时也会请求载入图片，AngularJS在页面载入完毕时才开始编译——浏览器请求载入图片时<code>{{phone.imageUrl}}</code>还没得到编译！有了这个<code>ngSrc</code>指令会避免产生这种情况，使用<code>ngSrc</code>指令防止浏览器产生一个指向非法地址的请求。</p>
+
+        <h3>测试</h3>
+
+        <p><strong>test/e2e/scenarios.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+    it</span><span class="pun">(</span><span class="str">'should render phone specific links'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      input</span><span class="pun">(</span><span class="str">'query'</span><span class="pun">).</span><span class="pln">enter</span><span class="pun">(</span><span class="str">'nexus'</span><span class="pun">);</span><span class="pln">
+      element</span><span class="pun">(</span><span class="str">'.phones li a'</span><span class="pun">).</span><span class="pln">click</span><span class="pun">();</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">browser</span><span class="pun">().</span><span class="pln">location</span><span class="pun">().</span><span class="pln">url</span><span class="pun">()).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'/phones/nexus-s'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+
+        <p>我们添加了一个新的端到端测试来验证应用为手机视图产生了正确的链接，上面就是我们的实现。</p>
+
+        <p>你现在可以刷新你的浏览器，并且用端到端测试器来观察测试的运行，或者你可以在<a href="http://angular.github.com/angular-phonecat/step-6/test/e2e/runner.html" target="_blank">AngularJS服务器</a>上运行它们。</p>
+
+        <h2 id="zchq88-gundong-n9d2">练习</h2>
+
+        <p>将<code>ng-src</code>指令换成普通的<code>src</code>属性。用像Firebug，Chrome Web Inspector这样的工具，或者直接去看服务器的访问日志，你会发现你的应用向<code>/app/%7B%7Bphone.imageUrl%7D%7D</code>（或者<code>/app/{{phone.imageUrl}}</code>）发送了一个非法请求。</p>
+
+        <p>这个问题是由于浏览器会在遇到<code>img</code>标签的时候立刻向还未得到编译的URL地址发送一个请求，AngularJS只有在页面载入完毕后才开始编译表达式从而得到正确的图片URL地址。</p>
+
+        <h2 id="zchq88-gundong-n9d3">总结</h2>
+
+        <p>如今你已经添加了手机图片和链接，转到<a href="#" onclick="pymChild.sendMessage('href',9)">路由与多视图</a>，我们将学习AngularJS的布局模板以及AngularJS是如何轻易地为应用提供多重视图。</p>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/polyfill/rem.min.js"></script>
+<script src="../assets/js/polyfill/respond.min.js"></script>
+<script src="../assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/amazeui.min.js"></script>
+    <!--<![endif]-->
+    <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
+    <script src="../assets/js/pym.js"></script>
+    <script src="../assets/js/pym-child.js"></script>
+    <script src="../js/base.js"></script>
+</body>
+
+</html>

@@ -82,17 +82,17 @@
         </div>
     </header>
     <div class="am-margin-vertical" style="background-color: #eeeeee;">
-        <div class="am-g am-g-fixed"><img class="am-margin" src="../image/my-angularjs/AngularJS.jpg">
+        <div class="am-g am-g-fixed am-padding"><img class="am-img-responsive" src="../image/my-angularjs/AngularJS.jpg">
         </div>
     </div>
     <section class="am-g am-g-fixed">
         <!--边侧导航-begin-->
         <aside ng-controller="Nav">
             <div class="am-u-md-3">
-                <div class="am-panel-group am-hide-sm-only" id="asidenav" data-am-sticky>
+                <div class="am-panel-group am-hide-sm-only  am-scrollable-vertical" style="height:500px" id="asidenav" data-am-sticky>
                     <div class="am-panel am-panel-default" ng-repeat="x in naclinks">
                         <div class="am-panel-hd">
-                            <h4 class="am-panel-title" data-am-collapse="{parent: '#asidenav', target:'#{{x.id}}'}" ng-click="aside_nav_h4_click($index)">{{x.title}}</h4>
+                            <h4 id="lesson{{$index}}" class="am-panel-title" data-am-collapse="{parent: '#asidenav', target:'#{{x.id}}'}" ng-click="aside_nav_h4_click($index)">{{x.title}}</h4>
                         </div>
                         <div id="{{x.id}}" class="am-panel-collapse am-collapse" ng-class="{'am-in': ($index==0)}">
                             <div class="am-panel-bd" ng-repeat="y in x.childlinks">
@@ -131,7 +131,7 @@
             <div class="am-u-md-8">
                 <h2>zchq88</h2>
                 <ul>
-                    <li><span class="am-icon-heart">&nbsp;参考、使用的项目：</span> | <a href="http://amazeui.org/">AmazeUI</a> | <a href="http://echarts.baidu.com/">ECharts</a>
+                    <li><span class="am-icon-heart">&nbsp;参考、使用的项目：</span> | <a href="http://amazeui.org/">AmazeUI</a> | <a href="http://echarts.baidu.com/">ECharts</a>| <a href="https://angular.io">angularjs 1.x</a>
                     </li>
                 </ul>
                 <p>© 2015 zchq88, Inc. Licensed under <a href="http://opensource.org/licenses/MIT" target="_blank">MIT license</a>. Developed with <a href="http://blog.brackets.io/" target="_blank">Brackets</a>.</p>

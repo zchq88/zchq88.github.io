@@ -1,0 +1,166 @@
+<!doctype html>
+<html class="no-js" ng-app="myapp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>13 事件处理器</title>
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+    <meta name="msapplication-TileColor" content="#0e90d2">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+  <link rel="canonical" href="http://www.example.com/">
+  -->
+
+    <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器。 请 <a
+  href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+    <div class="post-text">
+       <h2 id="zchq88-gundong-n13d1">事件处理器</h2>
+        <p>在这一步，你会在手机详细信息页面让手机图片可以点击。</p>
+
+        <p>请重置工作目录：</p>
+
+        <pre class="prettyprint"><code><span class="pln">git checkout </span><span class="pun">-</span><span class="pln">f step</span><span class="pun">-</span><span class="lit">10</span></code></pre>
+
+        <p>手机详细信息视图展示了一幅当前手机的大号图片，以及几个小一点的缩略图。如果用户点击缩略图就能把那张大的替换成自己那就更好了。现在我们来看看如何用AngularJS来实现它。</p>
+
+        <p>步骤9和步骤10之间最重要的不同在下面列出。你可以在<a href="https://github.com/angular/angular-phonecat/compare/step-9...step-10">GitHub</a>里看到完整的差别。</p>
+
+        <h3>控制器</h3>
+
+        <p><strong>app/js/controllers.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">PhoneDetailCtrl</span><span class="pun">(</span><span class="pln">$scope</span><span class="pun">,</span><span class="pln"> $routeParams</span><span class="pun">,</span><span class="pln"> $http</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  $http</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">(</span><span class="str">'phones/'</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> $routeParams</span><span class="pun">.</span><span class="pln">phoneId </span><span class="pun">+</span><span class="pln"> </span><span class="str">'.json'</span><span class="pun">).</span><span class="pln">success</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">data</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    $scope</span><span class="pun">.</span><span class="pln">phone </span><span class="pun">=</span><span class="pln"> data</span><span class="pun">;</span><span class="pln">
+    $scope</span><span class="pun">.</span><span class="pln">mainImageUrl </span><span class="pun">=</span><span class="pln"> data</span><span class="pun">.</span><span class="pln">images</span><span class="pun">[</span><span class="lit">0</span><span class="pun">];</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+
+ $scope</span><span class="pun">.</span><span class="pln">setImage </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">imageUrl</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    $scope</span><span class="pun">.</span><span class="pln">mainImageUrl </span><span class="pun">=</span><span class="pln"> imageUrl</span><span class="pun">;</span><span class="pln">
+  </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">//PhoneDetailCtrl.$inject = ['$scope', '$routeParams', '$http'];</span></code></pre>
+
+        <p>在<code>PhoneDetailCtrl</code>控制器中，我们创建了<code>mainImageUrl</code>模型属性，并且把它的默认值设为第一个手机图片的URL。</p>
+
+        <h3>模板</h3>
+
+        <p><strong>app/partials/phone-detail.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="tag">&lt;img</span><span class="pln"> </span><span class="atn">ng-src</span><span class="pun">=</span><span class="atv">"{{mainImageUrl}}"</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"phone"</span><span class="tag">&gt;</span><span class="pln">
+
+...
+
+</span><span class="tag">&lt;ul</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"phone-thumbs"</span><span class="tag">&gt;</span><span class="pln">
+  </span><span class="tag">&lt;li</span><span class="pln"> </span><span class="atn">ng-repeat</span><span class="pun">=</span><span class="atv">"img in phone.images"</span><span class="tag">&gt;</span><span class="pln">
+    </span><span class="tag">&lt;img</span><span class="pln"> </span><span class="atn">ng-src</span><span class="pun">=</span><span class="atv">"{{img}}"</span><span class="pln"> </span><span class="atn">ng-click</span><span class="pun">=</span><span class="atv">"setImage(img)"</span><span class="tag">&gt;</span><span class="pln">
+  </span><span class="tag">&lt;/li&gt;</span><span class="pln">
+</span><span class="tag">&lt;/ul&gt;</span><span class="pln">
+...</span></code></pre>
+
+        <p>我们把大图片的<code>ngSrc</code>指令绑定到<code>mainImageUrl</code>属性上。</p>
+
+        <p>同时我们注册一个<a href="http://code.angularjs.org/1.1.0/docs/api/ng.directive%3angClick" target="_blank">ngClick</a>处理器到缩略图上。当一个用户点击缩略图的任意一个时，这个处理器会使用<code>setImage</code>事件处理函数来把<code>mainImageUrl</code>属性设置成选定缩略图的URL。</p>
+
+        <h3>测试</h3>
+
+        <p>为了验证这个新特性，我们添加了两个端到端测试。一个验证主图片被默认设置成第一个手机图片。第二个测试点击几个缩略图并且验证主图片随之合理的变化。</p>
+
+        <p><strong>test/e2e/scenarios.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+  describe</span><span class="pun">(</span><span class="str">'Phone detail view'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+
+</span><span class="pun">...</span><span class="pln">
+
+    it</span><span class="pun">(</span><span class="str">'should display the first phone image as the main phone image'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">element</span><span class="pun">(</span><span class="str">'img.phone'</span><span class="pun">).</span><span class="pln">attr</span><span class="pun">(</span><span class="str">'src'</span><span class="pun">)).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'img/phones/nexus-s.0.jpg'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+
+    it</span><span class="pun">(</span><span class="str">'should swap main image if a thumbnail image is clicked on'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      element</span><span class="pun">(</span><span class="str">'.phone-thumbs li:nth-child(3) img'</span><span class="pun">).</span><span class="pln">click</span><span class="pun">();</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">element</span><span class="pun">(</span><span class="str">'img.phone'</span><span class="pun">).</span><span class="pln">attr</span><span class="pun">(</span><span class="str">'src'</span><span class="pun">)).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'img/phones/nexus-s.2.jpg'</span><span class="pun">);</span><span class="pln">
+
+      element</span><span class="pun">(</span><span class="str">'.phone-thumbs li:nth-child(1) img'</span><span class="pun">).</span><span class="pln">click</span><span class="pun">();</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">element</span><span class="pun">(</span><span class="str">'img.phone'</span><span class="pun">).</span><span class="pln">attr</span><span class="pun">(</span><span class="str">'src'</span><span class="pun">)).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'img/phones/nexus-s.0.jpg'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">});</span></code></pre>
+
+        <p>你现在可以刷新你的浏览器，然后重新跑一遍端到端测试，或者你可以在<a href="http://angular.github.com/angular-phonecat/step-4/test/e2e/runner.html" target="_blank">AngularJS的服务器</a>上运行一下。</p>
+
+        <h2 id="zchq88-gundong-n13d2">练习</h2>
+
+        <p>为<code>PhoneDetailCtrl</code>添加一个新的控制器方法：</p>
+
+        <pre class="prettyprint"><code><span class="pln">    $scope</span><span class="pun">.</span><span class="pln">hello </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">name</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        alert</span><span class="pun">(</span><span class="str">'Hello '</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="pun">(</span><span class="pln">name </span><span class="pun">||</span><span class="pln"> </span><span class="str">'world'</span><span class="pun">)</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> </span><span class="str">'!'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">}</span></code></pre>
+
+        <p>并且添加：</p>
+
+        <pre class="prettyprint"><code><span class="pln">    </span><span class="tag">&lt;button</span><span class="pln"> </span><span class="atn">ng-click</span><span class="pun">=</span><span class="atv">"hello('Elmo')"</span><span class="tag">&gt;</span><span class="pln">Hello</span><span class="tag">&lt;/button&gt;</span></code></pre>
+
+        <p>到<strong>phone-details.html</strong>模板。</p>
+
+        <h2 id="zchq88-gundong-n13d3">总结</h2>
+
+        <p>现在图片浏览器已经做好了，我们已经为<a href="#" onclick="pymChild.sendMessage('href',13)">REST 和定制服务</a>做好了准备，我们会学习用一种更加优雅的方式来获取数据。</p>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/polyfill/rem.min.js"></script>
+<script src="../assets/js/polyfill/respond.min.js"></script>
+<script src="../assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/amazeui.min.js"></script>
+    <!--<![endif]-->
+    <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
+    <script src="../assets/js/pym.js"></script>
+    <script src="../assets/js/pym-child.js"></script>
+    <script src="../js/base.js"></script>
+</body>
+
+</html>

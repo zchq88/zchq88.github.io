@@ -1,0 +1,246 @@
+<!doctype html>
+<html class="no-js" ng-app="myapp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>14 REST 和定制服务</title>
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+    <meta name="msapplication-TileColor" content="#0e90d2">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+  <link rel="canonical" href="http://www.example.com/">
+  -->
+
+    <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器。 请 <a
+  href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+    <div class="post-text">
+        <h2 id="zchq88-gundong-n14d1">REST 和定制服务</h2>
+        <p>在这一步中，我们会改进我们APP获取数据的方式。</p>
+
+        <p>请重置工作目录：</p>
+
+        <pre class="prettyprint"><code><span class="pln">git checkout </span><span class="pun">-</span><span class="pln">f step</span><span class="pun">-</span><span class="lit">11</span></code></pre>
+
+        <p>对我们应用所做的最后一个改进就是定义一个代表<a href="http://en.wikipedia.org/wiki/Representational_State_Transfer" target="_blank">RESTful</a>客户端的定制服务。有了这个客户端我们可以用一种更简单的方式来发送XHR请求，而不用去关心更底层的<a href="http://code.angularjs.org/1.1.0/docs/api/ng.%24http" target="_blank">$http</a>服务（API、HTTP方法和URL）。</p>
+
+        <p>步骤9和步骤10之间最重要的不同在下面列出。你可以在<a href="https://github.com/angular/angular-phonecat/compare/step-10...step-11">GitHub</a>里看到完整的差别。</p>
+
+        <h3>模板</h3>
+
+        <p>定制的服务被定义在<strong>app/js/services</strong>，所以我们需要在布局模板中引入这个文件。另外，我们也要加载<strong>angularjs-resource.js</strong>这个文件，它包含了<code>ngResource</code>模块以及其中的<code>$resource</code>服务，我们一会就会用到它们：</p>
+
+        <p><strong>app/index.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+  </span><span class="pun">&lt;</span><span class="pln">script src</span><span class="pun">=</span><span class="str">"js/services.js"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln">
+  </span><span class="pun">&lt;</span><span class="pln">script src</span><span class="pun">=</span><span class="str">"lib/angular/angular-resource.js"</span><span class="pun">&gt;&lt;/</span><span class="pln">script</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+
+        <h3>服务</h3>
+
+        <p><strong>app/js/services.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pln">angular</span><span class="pun">.</span><span class="kwd">module</span><span class="pun">(</span><span class="str">'phonecatServices'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="str">'ngResource'</span><span class="pun">]).</span><span class="pln">
+    factory</span><span class="pun">(</span><span class="str">'Phone'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">$resource</span><span class="pun">){</span><span class="pln">
+      </span><span class="kwd">return</span><span class="pln"> $resource</span><span class="pun">(</span><span class="str">'phones/:phoneId.json'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{},</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        query</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">method</span><span class="pun">:</span><span class="str">'GET'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">params</span><span class="pun">:{</span><span class="pln">phoneId</span><span class="pun">:</span><span class="str">'phones'</span><span class="pun">},</span><span class="pln"> isArray</span><span class="pun">:</span><span class="kwd">true</span><span class="pun">}</span><span class="pln">
+      </span><span class="pun">});</span><span class="pln">
+    </span><span class="pun">});</span></code></pre>
+
+        <p>我们使用模块API通过一个工厂方法注册了一个定制服务。我们传入服务的名字<code>Phone</code>和工厂函数。工厂函数和控制器构造函数差不多，它们都通过函数参数声明依赖服务。Phone服务声明了它依赖于<code>$resource</code>服务。</p>
+
+        <p><a href="http://code.angularjs.org/1.1.0/docs/api/ngResource.%24resource" target="_blank">$resource</a>服务使得用短短的几行代码就可以创建一个<a href="http://en.wikipedia.org/wiki/Representational_State_Transfer" target="_blank">RESTful</a>客户端。我们的应用使用这个客户端来代替底层的<a href="http://code.angularjs.org/1.1.0/docs/api/ng.%24http" target="_blank">$http</a>服务。</p>
+
+        <p><strong>app/js/app.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+angular</span><span class="pun">.</span><span class="kwd">module</span><span class="pun">(</span><span class="str">'phonecat'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[</span><span class="str">'phonecatFilters'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'phonecatServices'</span><span class="pun">]).</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+
+        <p>我们需要把<code>phonecatServices</code>添加到<code>phonecat</code>的依赖数组里。</p>
+
+        <h3>控制器</h3>
+
+        <p>通过重构掉底层的<a href="http://code.angularjs.org/1.1.0/docs/api/ng.%24http" target="_blank">$http</a>服务，把它放在一个新的服务<code>Phone</code>中，我们可以大大简化子控制器（<code>PhoneListCtrl</code>和<code>PhoneDetailCtrl</code>）。AngularJS的<a href="http://code.angularjs.org/1.1.0/docs/api/ngResource.%24resource" target="_blank">$resource</a>相比于<code>$http</code>更加适合于与RESTful数据源交互。而且现在我们更容易理解控制器这些代码在干什么了。</p>
+
+        <p><strong>app/js/controllers.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+
+</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">PhoneListCtrl</span><span class="pun">(</span><span class="pln">$scope</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Phone</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  $scope</span><span class="pun">.</span><span class="pln">phones </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Phone</span><span class="pun">.</span><span class="pln">query</span><span class="pun">();</span><span class="pln">
+  $scope</span><span class="pun">.</span><span class="pln">orderProp </span><span class="pun">=</span><span class="pln"> </span><span class="str">'age'</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">//PhoneListCtrl.$inject = ['$scope', 'Phone'];</span><span class="pln">
+
+
+
+</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">PhoneDetailCtrl</span><span class="pun">(</span><span class="pln">$scope</span><span class="pun">,</span><span class="pln"> $routeParams</span><span class="pun">,</span><span class="pln"> </span><span class="typ">Phone</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  $scope</span><span class="pun">.</span><span class="pln">phone </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Phone</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">({</span><span class="pln">phoneId</span><span class="pun">:</span><span class="pln"> $routeParams</span><span class="pun">.</span><span class="pln">phoneId</span><span class="pun">},</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">phone</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    $scope</span><span class="pun">.</span><span class="pln">mainImageUrl </span><span class="pun">=</span><span class="pln"> phone</span><span class="pun">.</span><span class="pln">images</span><span class="pun">[</span><span class="lit">0</span><span class="pun">];</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+
+  $scope</span><span class="pun">.</span><span class="pln">setImage </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">imageUrl</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    $scope</span><span class="pun">.</span><span class="pln">mainImageUrl </span><span class="pun">=</span><span class="pln"> imageUrl</span><span class="pun">;</span><span class="pln">
+  </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">//PhoneDetailCtrl.$inject = ['$scope', '$routeParams', 'Phone'];</span></code></pre>
+
+        <p>注意到，在<code>PhoneListCtrl</code>里我们把：</p>
+
+        <pre class="prettyprint"><code><span class="pln">$http</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">(</span><span class="str">'phones/phones.json'</span><span class="pun">).</span><span class="pln">success</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">data</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  $scope</span><span class="pun">.</span><span class="pln">phones </span><span class="pun">=</span><span class="pln"> data</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">});</span></code></pre>
+
+        <p>换成了：</p>
+
+        <pre class="prettyprint"><code><span class="pln">$scope</span><span class="pun">.</span><span class="pln">phones </span><span class="pun">=</span><span class="pln"> </span><span class="typ">Phone</span><span class="pun">.</span><span class="pln">query</span><span class="pun">();</span></code></pre>
+
+        <p>我们通过这条简单的语句来查询所有的手机。</p>
+
+        <p>另一个非常需要注意的是，在上面的代码里面，当调用Phone服务的方法是我们并没有传递任何回调函数。尽管这看起来结果是同步返回的，其实根本就不是。被同步返回的是一个“future”——一个对象，当XHR相应返回的时候会填充进数据。鉴于AngularJS的数据绑定，我们可以使用future并且把它绑定到我们的模板上。然后，当数据到达时，我们的视图会自动更新。</p>
+
+        <p>有的时候，单单依赖future对象和数据绑定不足以满足我们的需求，所以在这些情况下，我们需要添加一个回调函数来处理服务器的响应。<code>PhoneDetailCtrl</code>控制器通过在一个回调函数中设置<code>mainImageUrl</code>就是一个解释。</p>
+
+        <h3>测试</h3>
+
+        <p>修改我们的单元测试来验证我们新的服务会发起HTTP请求并且按照预期地处理它们。测试同时也检查了我们的控制器是否与服务正确协作。</p>
+
+        <p><a href="http://code.angularjs.org/1.1.0/docs/api/ngResource.%24resource" target="_blank">$resource</a>服务通过添加更新和删除资源的方法来增强响应得到的对象。如果我们打算使用<code>toEqual</code>匹配器，我们的测试会失败，因为测试值并不会和响应完全等同。为了解决这个问题，我们需要使用一个最近定义的<code>toEqualData</code><a href="http://pivotal.github.com/jasmine/jsdoc/symbols/jasmine.Matchers.html" target="_blank">Jasmine匹配器</a>。当<code>toEqualData</code>匹配器比较两个对象的时候，它只考虑对象的属性而忽略掉所有的方法。</p>
+
+        <p><strong>test/unit/controllersSpec.js：</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pln">describe</span><span class="pun">(</span><span class="str">'PhoneCat controllers'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+
+  beforeEach</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(){</span><span class="pln">
+    </span><span class="kwd">this</span><span class="pun">.</span><span class="pln">addMatchers</span><span class="pun">({</span><span class="pln">
+      toEqualData</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">expected</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pln"> angular</span><span class="pun">.</span><span class="pln">equals</span><span class="pun">(</span><span class="kwd">this</span><span class="pun">.</span><span class="pln">actual</span><span class="pun">,</span><span class="pln"> expected</span><span class="pun">);</span><span class="pln">
+      </span><span class="pun">}</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+
+ beforeEach</span><span class="pun">(</span><span class="kwd">module</span><span class="pun">(</span><span class="str">'phonecatServices'</span><span class="pun">));</span><span class="pln">
+
+  describe</span><span class="pun">(</span><span class="str">'PhoneListCtrl'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(){</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> scope</span><span class="pun">,</span><span class="pln"> ctrl</span><span class="pun">,</span><span class="pln"> $httpBackend</span><span class="pun">;</span><span class="pln">
+
+    beforeEach</span><span class="pun">(</span><span class="pln">inject</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">_$httpBackend_</span><span class="pun">,</span><span class="pln"> $rootScope</span><span class="pun">,</span><span class="pln"> $controller</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      $httpBackend </span><span class="pun">=</span><span class="pln"> _$httpBackend_</span><span class="pun">;</span><span class="pln">
+      $httpBackend</span><span class="pun">.</span><span class="pln">expectGET</span><span class="pun">(</span><span class="str">'phones/phones.json'</span><span class="pun">).</span><span class="pln">
+          respond</span><span class="pun">([{</span><span class="pln">name</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Nexus S'</span><span class="pun">},</span><span class="pln"> </span><span class="pun">{</span><span class="pln">name</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Motorola DROID'</span><span class="pun">}]);</span><span class="pln">
+
+      scope </span><span class="pun">=</span><span class="pln"> $rootScope</span><span class="pun">.</span><span class="pln">$new</span><span class="pun">();</span><span class="pln">
+      ctrl </span><span class="pun">=</span><span class="pln"> $controller</span><span class="pun">(</span><span class="typ">PhoneListCtrl</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">$scope</span><span class="pun">:</span><span class="pln"> scope</span><span class="pun">});</span><span class="pln">
+    </span><span class="pun">}));</span><span class="pln">
+
+    it</span><span class="pun">(</span><span class="str">'should create "phones" model with 2 phones fetched from xhr'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">scope</span><span class="pun">.</span><span class="pln">phones</span><span class="pun">).</span><span class="pln">toEqual</span><span class="pun">([]);</span><span class="pln">
+      $httpBackend</span><span class="pun">.</span><span class="pln">flush</span><span class="pun">();</span><span class="pln">
+
+      expect</span><span class="pun">(</span><span class="pln">scope</span><span class="pun">.</span><span class="pln">phones</span><span class="pun">).</span><span class="pln">toEqualData</span><span class="pun">(</span><span class="pln">
+          </span><span class="pun">[{</span><span class="pln">name</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Nexus S'</span><span class="pun">},</span><span class="pln"> </span><span class="pun">{</span><span class="pln">name</span><span class="pun">:</span><span class="pln"> </span><span class="str">'Motorola DROID'</span><span class="pun">}]);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+
+    it</span><span class="pun">(</span><span class="str">'should set the default value of orderProp model'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">scope</span><span class="pun">.</span><span class="pln">orderProp</span><span class="pun">).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'age'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+
+  describe</span><span class="pun">(</span><span class="str">'PhoneDetailCtrl'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(){</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> scope</span><span class="pun">,</span><span class="pln"> $httpBackend</span><span class="pun">,</span><span class="pln"> ctrl</span><span class="pun">,</span><span class="pln">
+        xyzPhoneData </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+          </span><span class="kwd">return</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+            name</span><span class="pun">:</span><span class="pln"> </span><span class="str">'phone xyz'</span><span class="pun">,</span><span class="pln">
+            images</span><span class="pun">:</span><span class="pln"> </span><span class="pun">[</span><span class="str">'image/url1.png'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'image/url2.png'</span><span class="pun">]</span><span class="pln">
+          </span><span class="pun">}</span><span class="pln">
+        </span><span class="pun">};</span><span class="pln">
+
+    beforeEach</span><span class="pun">(</span><span class="pln">inject</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">_$httpBackend_</span><span class="pun">,</span><span class="pln"> $rootScope</span><span class="pun">,</span><span class="pln"> $routeParams</span><span class="pun">,</span><span class="pln"> $controller</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      $httpBackend </span><span class="pun">=</span><span class="pln"> _$httpBackend_</span><span class="pun">;</span><span class="pln">
+      $httpBackend</span><span class="pun">.</span><span class="pln">expectGET</span><span class="pun">(</span><span class="str">'phones/xyz.json'</span><span class="pun">).</span><span class="pln">respond</span><span class="pun">(</span><span class="pln">xyzPhoneData</span><span class="pun">());</span><span class="pln">
+
+      $routeParams</span><span class="pun">.</span><span class="pln">phoneId </span><span class="pun">=</span><span class="pln"> </span><span class="str">'xyz'</span><span class="pun">;</span><span class="pln">
+      scope </span><span class="pun">=</span><span class="pln"> $rootScope</span><span class="pun">.</span><span class="pln">$new</span><span class="pun">();</span><span class="pln">
+      ctrl </span><span class="pun">=</span><span class="pln"> $controller</span><span class="pun">(</span><span class="typ">PhoneDetailCtrl</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">$scope</span><span class="pun">:</span><span class="pln"> scope</span><span class="pun">});</span><span class="pln">
+    </span><span class="pun">}));</span><span class="pln">
+
+    it</span><span class="pun">(</span><span class="str">'should fetch phone detail'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">scope</span><span class="pun">.</span><span class="pln">phone</span><span class="pun">).</span><span class="pln">toEqualData</span><span class="pun">({});</span><span class="pln">
+      $httpBackend</span><span class="pun">.</span><span class="pln">flush</span><span class="pun">();</span><span class="pln">
+
+      expect</span><span class="pun">(</span><span class="pln">scope</span><span class="pun">.</span><span class="pln">phone</span><span class="pun">).</span><span class="pln">toEqualData</span><span class="pun">(</span><span class="pln">xyzPhoneData</span><span class="pun">());</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">});</span></code></pre>
+
+        <p>执行<code>./scripts/test.sh</code>运行测试，你应该会看到如下的输出：</p>
+
+        <pre class="prettyprint"><code><span class="typ">Chrome</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Runner</span><span class="pln"> reset</span><span class="pun">.</span><span class="pln">
+</span><span class="pun">....</span><span class="pln">
+</span><span class="typ">Total</span><span class="pln"> </span><span class="lit">4</span><span class="pln"> tests </span><span class="pun">(</span><span class="typ">Passed</span><span class="pun">:</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Fails</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Errors</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">(</span><span class="lit">3.00</span><span class="pln"> ms</span><span class="pun">)</span><span class="pln">
+  </span><span class="typ">Chrome</span><span class="pln"> </span><span class="lit">19.0</span><span class="pun">.</span><span class="lit">1084.36</span><span class="pln"> </span><span class="typ">Mac</span><span class="pln"> OS</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Run</span><span class="pln"> </span><span class="lit">4</span><span class="pln"> tests </span><span class="pun">(</span><span class="typ">Passed</span><span class="pun">:</span><span class="pln"> </span><span class="lit">4</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Fails</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Errors</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">(</span><span class="lit">3.00</span><span class="pln"> ms</span><span class="pun">)</span></code></pre>
+
+        <h2 id="zchq88-gundong-n14d2">总结</h2>
+
+        <p>完工！你在相当短的时间内已经创建了一个Web应用。下一课<a href="#" onclick="pymChild.sendMessage('href',14)">动画操作</a>了解如何改善这个应用程序的动画。</p>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/polyfill/rem.min.js"></script>
+<script src="../assets/js/polyfill/respond.min.js"></script>
+<script src="../assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/amazeui.min.js"></script>
+    <!--<![endif]-->
+    <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
+    <script src="../assets/js/pym.js"></script>
+    <script src="../assets/js/pym-child.js"></script>
+    <script src="../js/base.js"></script>
+</body>
+
+</html>

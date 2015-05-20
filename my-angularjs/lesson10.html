@@ -1,0 +1,245 @@
+<!doctype html>
+<html class="no-js" ng-app="myapp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>10 路由与多视图</title>
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+    <meta name="msapplication-TileColor" content="#0e90d2">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+  <link rel="canonical" href="http://www.example.com/">
+  -->
+
+    <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器。 请 <a
+  href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+
+    <div class="post-text">
+       <h2 id="zchq88-gundong-n10d1">路由与多视图</h2>
+        <p>在这一步，你将学习如何创建一个布局模板并且通过路由功能来构建一个具有多个视图的应用。</p>
+
+        <p>请重置工作目录：</p>
+
+        <pre class="prettyprint"><code><span class="pln">git checkout </span><span class="pun">-</span><span class="pln">f step</span><span class="pun">-</span><span class="lit">7</span></code></pre>
+
+        <p>注意到现在当你转到<code>app/index.html</code>时，你会被重定向到<code>app/index.html#/phones</code>并且相同的手机列表在浏览器中显示了出来。当你点击一个手机链接时，一个手机详细信息列表也被显示了出来。</p>
+
+        <p>步骤6和步骤7之间最重要的不同在下面列出。你可以在<a href="https://github.com/angular/angular-phonecat/compare/step-6...step-7">GitHub</a>里看到完整的差别。</p>
+
+        <h2 id="zchq88-gundong-n10d2">多视图，路由和布局模板</h2>
+
+        <p>我们的应用正慢慢发展起来并且变得逐渐复杂。在步骤7之前，应用只给我们的用户提供了一个简单的界面（一张所有手机的列表），并且所有的模板代码位于<code>index.html</code>文件中。下一步是增加一个能够显示我们列表中每一部手机详细信息的页面。</p>
+
+        <p>为了增加详细信息视图，我们可以拓展<code>index.html</code>来同时包含两个视图的模板代码，但是这样会很快给我们带来巨大的麻烦。相反，我们要把<code>index.html</code>模板转变成<strong>“布局模板”</strong>。这是我们应用所有视图的通用模板。其他的“局部布局模板”随后根据当前的<strong>“路由”</strong>被充填入，从而形成一个完整视图展示给用户。</p>
+
+        <p>AngularJS中应用的路由通过<a href="http://code.angularjs.org/1.1.0/docs/api/ng.%24routeProvider" target="_blank">$routeProvider</a>来声明，它是<a href="http://code.angularjs.org/1.1.0/docs/api/ng.%24route" target="_blank">$route</a>服务的提供者。这项服务使得控制器、视图模板与当前浏览器的URL可以轻易集成。应用这个特性我们就可以实现<a href="http://en.wikipedia.org/wiki/Deep_linking" target="_blank">深链接</a>，它允许我们使用浏览器的历史(回退或者前进导航)和书签。</p>
+
+        <h3>关于依赖注入（DI），注入器（Injector）和服务提供者（Providers）</h3>
+
+        <p>正如从前面你学到的，<a href="http://code.angularjs.org/1.1.0/docs/guide/di" target="_blank">依赖注入</a>是AngularJS的核心特性，所以你必须要知道一点这家伙是怎么工作的。</p>
+
+        <p>当应用引导时，AngularJS会创建一个注入器，我们应用后面所有依赖注入的服务都会需要它。这个注入器自己并不知道<code>$http</code>和<code>$route</code>是干什么的，实际上除非它在模块定义的时候被配置过，否则它根本都不知道这些服务的存在。注入器唯一的职责是载入指定的服务模块，在这些模块中注册所有定义的服务提供者，并且当需要时给一个指定的函数注入依赖（服务）。这些依赖通过它们的提供者“懒惰式”（需要时才加载）实例化。</p>
+
+        <p>提供者是提供（创建）服务实例并且对外提供API接口的对象，它可以被用来控制一个服务的创建和运行时行为。对于<code>$route</code>服务来说，<code>$routeProvider</code>对外提供了API接口，通过API接口允许你为你的应用定义路由规则。</p>
+
+        <p>AngularJS模块解决了从应用中删除全局状态和提供方法来配置注入器这两个问题。和<code>AMD</code>或者<code>require.js</code>这两个模块（非AngularJS的两个库）不同的是，AngularJS模块并没有试图去解决脚本加载顺序以及懒惰式脚本加载这样的问题。这些目标和AngularJS要解决的问题毫无关联，所以这些模块完全可以共存来实现各自的目标。</p>
+
+        <h3>App 模块</h3>
+
+        <p><strong>app/js/app.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pln">angular</span><span class="pun">.</span><span class="kwd">module</span><span class="pun">(</span><span class="str">'phonecat'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">[]).</span><span class="pln">
+  config</span><span class="pun">([</span><span class="str">'$routeProvider'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">$routeProvider</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  $routeProvider</span><span class="pun">.</span><span class="pln">
+      </span><span class="kwd">when</span><span class="pun">(</span><span class="str">'/phones'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">templateUrl</span><span class="pun">:</span><span class="pln"> </span><span class="str">'partials/phone-list.html'</span><span class="pun">,</span><span class="pln">   controller</span><span class="pun">:</span><span class="pln"> </span><span class="typ">PhoneListCtrl</span><span class="pun">}).</span><span class="pln">
+      </span><span class="kwd">when</span><span class="pun">(</span><span class="str">'/phones/:phoneId'</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">templateUrl</span><span class="pun">:</span><span class="pln"> </span><span class="str">'partials/phone-detail.html'</span><span class="pun">,</span><span class="pln"> controller</span><span class="pun">:</span><span class="pln"> </span><span class="typ">PhoneDetailCtrl</span><span class="pun">}).</span><span class="pln">
+      otherwise</span><span class="pun">({</span><span class="pln">redirectTo</span><span class="pun">:</span><span class="pln"> </span><span class="str">'/phones'</span><span class="pun">});</span><span class="pln">
+</span><span class="pun">}]);</span></code></pre>
+
+        <p>为了给我们的应用配置路由，我们需要给应用创建一个模块。我们管这个模块叫做<code>phonecat</code>，并且通过使用<code>config</code>API，我们请求把<code>$routeProvider</code>注入到我们的配置函数并且使用<code>$routeProvider.when</code>API来定义我们的路由规则。</p>
+
+        <p>注意到在注入器配置阶段，提供者也可以同时被注入，但是一旦注入器被创建并且开始创建服务实例的时候，他们就不再会被外界所获取到。</p>
+
+        <p><strong>我们的路由规则定义如下</strong>
+        </p>
+
+        <ul>
+            <li>当URL 映射段为<code>/phones</code>时，手机列表视图会被显示出来。为了构造这个视图，AngularJS会使用<code>phone-list.html</code>模板和<code>PhoneListCtrl</code>控制器。</li>
+            <li>当URL 映射段为<code>/phone/:phoneId</code>时，手机详细信息视图被显示出来。这里<code>:phoneId</code>是URL的变量部分。为了构造手机详细视图，AngularJS会使用<code>phone-detail.html</code>模板和<code>PhoneDetailCtrl</code>控制器。</li>
+        </ul>
+
+        <p>我们重用之前创造过的<code>PhoneListCtrl</code>控制器，同时我们为手机详细视图添加一个新的<code>PhoneDetailCtrl</code>控制器，把它存放在<code>app/js/controllers.js</code>文件里。</p>
+
+        <p><code>$route.otherwise({redirectTo: '/phones'})</code>语句使得当浏览器地址不能匹配我们任何一个路由规则时，触发重定向到<code>/phones</code>。</p>
+
+        <p>注意到在第二条路由声明中<code>:phoneId</code>参数的使用。<code>$route</code>服务使用路由声明<code>/phones/:phoneId</code>作为一个匹配当前URL的模板。所有以<code>:</code>符号声明的变量（此处变量为<code>phones</code>）都会被提取，然后存放在<a href="http://code.angularjs.org/1.1.0/docs/api/ng.%24routeParams" target="_blank">$routeParams</a>对象中。</p>
+
+        <p>为了让我们的应用引导我们新创建的模块，我们同时需要在<a href="http://code.angularjs.org/1.1.0/docs/api/ng.directive%3angApp" target="_blank">ngApp</a>指令的值上指明模块的名字：</p>
+
+        <p><strong>app/index.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="dec">&lt;!doctype html&gt;</span><span class="pln">
+</span><span class="tag">&lt;html</span><span class="pln"> </span><span class="atn">lang</span><span class="pun">=</span><span class="atv">"en"</span><span class="pln"> </span><span class="atn">ng-app</span><span class="pun">=</span><span class="atv">"phonecat"</span><span class="tag">&gt;</span><span class="pln">
+...</span></code></pre>
+
+        <h3>控制器</h3>
+
+        <p><strong>app/js/controllers.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+</span><span class="kwd">function</span><span class="pln"> </span><span class="typ">PhoneDetailCtrl</span><span class="pun">(</span><span class="pln">$scope</span><span class="pun">,</span><span class="pln"> $routeParams</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  $scope</span><span class="pun">.</span><span class="pln">phoneId </span><span class="pun">=</span><span class="pln"> $routeParams</span><span class="pun">.</span><span class="pln">phoneId</span><span class="pun">;</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">//PhoneDetailCtrl.$inject = ['$scope', '$routeParams'];</span></code></pre>
+
+        <h3>模板</h3>
+
+        <p><code>$route</code>服务通常和<a href="http://code.angularjs.org/1.1.0/docs/api/ng.directive%3angView" target="_blank">ngView</a>指令一起使用。<code>ngView</code>指令的角色是为当前路由把对应的视图模板载入到布局模板中。</p>
+
+        <p><strong>app/index.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="tag">&lt;html</span><span class="pln"> </span><span class="atn">lang</span><span class="pun">=</span><span class="atv">"en"</span><span class="pln"> </span><span class="atn">ng-app</span><span class="pun">=</span><span class="atv">"phonecat"</span><span class="tag">&gt;</span><span class="pln">
+</span><span class="tag">&lt;head&gt;</span><span class="pln">
+...
+  </span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"lib/angular/angular.js"</span><span class="tag">&gt;&lt;/script&gt;</span><span class="pln">
+  </span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"js/app.js"</span><span class="tag">&gt;&lt;/script&gt;</span><span class="pln">
+  </span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"js/controllers.js"</span><span class="tag">&gt;&lt;/script&gt;</span><span class="pln">
+</span><span class="tag">&lt;/head&gt;</span><span class="pln">
+</span><span class="tag">&lt;body&gt;</span><span class="pln">
+
+  </span><span class="tag">&lt;div</span><span class="pln"> </span><span class="atn">ng-view</span><span class="tag">&gt;&lt;/div&gt;</span><span class="pln">
+
+</span><span class="tag">&lt;/body&gt;</span><span class="pln">
+</span><span class="tag">&lt;/html&gt;</span></code></pre>
+
+        <p>注意，我们把<code>index.html</code>模板里面大部分代码移除，我们只放置了一个<code>&lt;div&gt;</code>容器，这个<code>&lt;div&gt;</code>具有<code>ng-view</code>属性。我们删除掉的代码现在被放置在<code>phone-list.html</code>模板中：</p>
+
+        <p><strong>app/partials/phone-list.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="tag">&lt;div</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"container-fluid"</span><span class="tag">&gt;</span><span class="pln">
+  </span><span class="tag">&lt;div</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"row-fluid"</span><span class="tag">&gt;</span><span class="pln">
+    </span><span class="tag">&lt;div</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"span2"</span><span class="tag">&gt;</span><span class="pln">
+      </span><span class="com">&lt;!--Sidebar content--&gt;</span><span class="pln">
+
+      Search: </span><span class="tag">&lt;input</span><span class="pln"> </span><span class="atn">ng-model</span><span class="pun">=</span><span class="atv">"query"</span><span class="tag">&gt;</span><span class="pln">
+      Sort by:
+      </span><span class="tag">&lt;select</span><span class="pln"> </span><span class="atn">ng-model</span><span class="pun">=</span><span class="atv">"orderProp"</span><span class="tag">&gt;</span><span class="pln">
+        </span><span class="tag">&lt;option</span><span class="pln"> </span><span class="atn">value</span><span class="pun">=</span><span class="atv">"name"</span><span class="tag">&gt;</span><span class="pln">Alphabetical</span><span class="tag">&lt;/option&gt;</span><span class="pln">
+        </span><span class="tag">&lt;option</span><span class="pln"> </span><span class="atn">value</span><span class="pun">=</span><span class="atv">"age"</span><span class="tag">&gt;</span><span class="pln">Newest</span><span class="tag">&lt;/option&gt;</span><span class="pln">
+      </span><span class="tag">&lt;/select&gt;</span><span class="pln">
+
+    </span><span class="tag">&lt;/div&gt;</span><span class="pln">
+    </span><span class="tag">&lt;div</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"span10"</span><span class="tag">&gt;</span><span class="pln">
+      </span><span class="com">&lt;!--Body content--&gt;</span><span class="pln">
+
+      </span><span class="tag">&lt;ul</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"phones"</span><span class="tag">&gt;</span><span class="pln">
+        </span><span class="tag">&lt;li</span><span class="pln"> </span><span class="atn">ng-repeat</span><span class="pun">=</span><span class="atv">"phone in phones | filter:query | orderBy:orderProp"</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"thumbnail"</span><span class="tag">&gt;</span><span class="pln">
+          </span><span class="tag">&lt;a</span><span class="pln"> </span><span class="atn">href</span><span class="pun">=</span><span class="atv">"#/phones/{{phone.id}}"</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"thumb"</span><span class="tag">&gt;&lt;img</span><span class="pln"> </span><span class="atn">ng-src</span><span class="pun">=</span><span class="atv">"{{phone.imageUrl}}"</span><span class="tag">&gt;&lt;/a&gt;</span><span class="pln">
+          </span><span class="tag">&lt;a</span><span class="pln"> </span><span class="atn">href</span><span class="pun">=</span><span class="atv">"#/phones/{{phone.id}}"</span><span class="tag">&gt;</span><span class="pln">{{phone.name}}</span><span class="tag">&lt;/a&gt;</span><span class="pln">
+          </span><span class="tag">&lt;p&gt;</span><span class="pln">{{phone.snippet}}</span><span class="tag">&lt;/p&gt;</span><span class="pln">
+        </span><span class="tag">&lt;/li&gt;</span><span class="pln">
+      </span><span class="tag">&lt;/ul&gt;</span><span class="pln">
+
+    </span><span class="tag">&lt;/div&gt;</span><span class="pln">
+  </span><span class="tag">&lt;/div&gt;</span><span class="pln">
+</span><span class="tag">&lt;/div&gt;</span></code></pre>
+
+        <p>同时我们为手机详细信息视图添加一个占位模板。</p>
+
+        <p><strong>app/partials/phone-detail.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pln">TBD</span><span class="pun">:</span><span class="pln"> detail view </span><span class="kwd">for</span><span class="pln"> </span><span class="pun">{{</span><span class="pln">phoneId</span><span class="pun">}}</span></code></pre>
+
+        <p>注意到我们的布局模板中没再添加<code>PhoneListCtrl</code>或<code>PhoneDetailCtrl</code>控制器属性！</p>
+
+        <h3>测试</h3>
+
+        <p>为了自动验证所有的东西都良好地集成起来，我们需要写一些端到端测试，导航到不同的URL上然后验证正确地视图被渲染出来。</p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+  it</span><span class="pun">(</span><span class="str">'should redirect index.html to index.html#/phones'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    browser</span><span class="pun">().</span><span class="pln">navigateTo</span><span class="pun">(</span><span class="str">'../../app/index.html'</span><span class="pun">);</span><span class="pln">
+    expect</span><span class="pun">(</span><span class="pln">browser</span><span class="pun">().</span><span class="pln">location</span><span class="pun">().</span><span class="pln">url</span><span class="pun">()).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'/phones'</span><span class="pun">);</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">
+
+ describe</span><span class="pun">(</span><span class="str">'Phone detail view'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+
+    beforeEach</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      browser</span><span class="pun">().</span><span class="pln">navigateTo</span><span class="pun">(</span><span class="str">'../../app/index.html#/phones/nexus-s'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+
+
+    it</span><span class="pun">(</span><span class="str">'should display placeholder page with phoneId'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">binding</span><span class="pun">(</span><span class="str">'phoneId'</span><span class="pun">)).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'nexus-s'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+ </span><span class="pun">});</span></code></pre>
+
+        <p>你现在可以刷新你的浏览器，然后重新跑一遍端到端测试，或者你可以在<a href="http://angular.github.com/angular-phonecat/step-4/test/e2e/runner.html" target="_blank">AngularJS的服务器</a>上运行一下。</p>
+
+        <h2  id="zchq88-gundong-n10d3">练习</h2>
+
+        <p>试着在<code>index.html</code>上增加一个<code>{{orderProp}}</code>绑定，当你在手机列表视图上时什么也没变。这是因为<code>orderProp</code>模型仅仅在<code>PhoneListCtrl</code>管理的作用域下才是可见的，这与<code>&lt;div ng-view&gt;</code>元素相关。如果你在<code>phone-list.html</code>模板中加入同样的绑定，那么这个绑定会按你设想的那样被渲染出来。</p>
+
+        <h2 id="zchq88-gundong-n10d4">总结</h2>
+
+        <p>设置路由并实现手机列表视图之后，我们已经可以进入<a href="#" onclick="pymChild.sendMessage('href',10)">更多模板</a>来实现手机详细信息视图了。</p>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/polyfill/rem.min.js"></script>
+<script src="../assets/js/polyfill/respond.min.js"></script>
+<script src="../assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/amazeui.min.js"></script>
+    <!--<![endif]-->
+    <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
+    <script src="../assets/js/pym.js"></script>
+    <script src="../assets/js/pym-child.js"></script>
+    <script src="../js/base.js"></script>
+</body>
+
+</html>

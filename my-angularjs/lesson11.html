@@ -1,0 +1,225 @@
+<!doctype html>
+<html class="no-js" ng-app="myapp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>11 更多模板</title>
+
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+    <meta name="msapplication-TileColor" content="#0e90d2">
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+  <link rel="canonical" href="http://www.example.com/">
+  -->
+
+    <link rel="stylesheet" href="../assets/css/amazeui.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器。 请 <a
+  href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+    <div class="post-text">
+       <h2 id="zchq88-gundong-n11d1">更多模板</h2>
+        <p>在这一步，你将实现手机详细信息视图，这个视图会在用户点击手机列表中的一部手机时被显示出来。</p>
+
+        <p>请重置工作目录：</p>
+
+        <pre class="prettyprint"><code><span class="pln">git checkout </span><span class="pun">-</span><span class="pln">f step</span><span class="pun">-</span><span class="lit">8</span></code></pre>
+
+        <p>现在当你点击列表中的一部手机之后，这部手机的详细信息页面就会被显示出来。</p>
+
+        <p>为了实现手机详细信息视图我们将会使用<a href="http://code.angularjs.org/1.1.0/docs/api/ng.%24http" target="_blank">$http</a>来获取数据，同时我们也要增添一个<code>phone-detail.html</code>视图模板。</p>
+
+        <p>步骤7和步骤8之间最重要的不同在下面列出。你可以在<a href="https://github.com/angular/angular-phonecat/compare/step-7...step-8">GitHub</a>里看到完整的差别。</p>
+
+        <h3>数据</h3>
+
+        <p>除了<code>phones.json</code>，<code>app/phones/</code>目录也包含了每一部手机信息的json文件。</p>
+
+        <p><strong>app/phones/nexus-s.json</strong>（样例片段）</p>
+
+        <pre class="prettyprint"><code><span class="pun">{</span><span class="pln">
+  </span><span class="str">"additionalFeatures"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Contour Display, Near Field Communications (NFC),..."</span><span class="pun">,</span><span class="pln">
+  </span><span class="str">"android"</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      </span><span class="str">"os"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Android 2.3"</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"ui"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Android"</span><span class="pln">
+  </span><span class="pun">},</span><span class="pln">
+  </span><span class="pun">...</span><span class="pln">
+  </span><span class="str">"images"</span><span class="pun">:</span><span class="pln"> </span><span class="pun">[</span><span class="pln">
+      </span><span class="str">"img/phones/nexus-s.0.jpg"</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"img/phones/nexus-s.1.jpg"</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"img/phones/nexus-s.2.jpg"</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"img/phones/nexus-s.3.jpg"</span><span class="pln">
+  </span><span class="pun">],</span><span class="pln">
+  </span><span class="str">"storage"</span><span class="pun">:</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      </span><span class="str">"flash"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"16384MB"</span><span class="pun">,</span><span class="pln">
+      </span><span class="str">"ram"</span><span class="pun">:</span><span class="pln"> </span><span class="str">"512MB"</span><span class="pln">
+  </span><span class="pun">}</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
+
+        <p>这些文件中的每一个都用相同的数据结构描述了一部手机的不同属性。我们会在手机详细信息视图中显示这些数据。</p>
+
+        <h3>控制器</h3>
+
+        <p>我们使用<code>$http</code>服务获取数据，以此来拓展我们的<code>PhoneListCtrl</code>。这和之前的手机列表控制器的工作方式是一样的。</p>
+
+        <p><strong>app/js/controllers.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="kwd">function</span><span class="pln"> </span><span class="typ">PhoneDetailCtrl</span><span class="pun">(</span><span class="pln">$scope</span><span class="pun">,</span><span class="pln"> $routeParams</span><span class="pun">,</span><span class="pln"> $http</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+  $http</span><span class="pun">.</span><span class="kwd">get</span><span class="pun">(</span><span class="str">'phones/'</span><span class="pln"> </span><span class="pun">+</span><span class="pln"> $routeParams</span><span class="pun">.</span><span class="pln">phoneId </span><span class="pun">+</span><span class="pln"> </span><span class="str">'.json'</span><span class="pun">).</span><span class="pln">success</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">data</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    $scope</span><span class="pun">.</span><span class="pln">phone </span><span class="pun">=</span><span class="pln"> data</span><span class="pun">;</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">}</span><span class="pln">
+
+</span><span class="com">//PhoneDetailCtrl.$inject = ['$scope', '$routeParams', '$http'];</span></code></pre>
+
+        <p>为了构造HTTP请求的URL，我们需要<code>$route</code>服务提供的当前路由中抽取<code>$routeParams.phoneId</code>。</p>
+
+        <h3>模板</h3>
+
+        <p><strong>phone-detail.html</strong>文件中原有的TBD占位行已经被列表和构成手机详细信息的绑定替换掉了。注意到，这里我们使用AngularJS的<code>{{表达式}}</code>标记和<code>ngRepeat</code>来在视图中渲染数据模型。</p>
+
+        <p><strong>app/partials/phone-detail.html</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="tag">&lt;img</span><span class="pln"> </span><span class="atn">ng-src</span><span class="pun">=</span><span class="atv">"{{phone.images[0]}}"</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"phone"</span><span class="tag">&gt;</span><span class="pln">
+
+</span><span class="tag">&lt;h1&gt;</span><span class="pln">{{phone.name}}</span><span class="tag">&lt;/h1&gt;</span><span class="pln">
+
+</span><span class="tag">&lt;p&gt;</span><span class="pln">{{phone.description}}</span><span class="tag">&lt;/p&gt;</span><span class="pln">
+
+</span><span class="tag">&lt;ul</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"phone-thumbs"</span><span class="tag">&gt;</span><span class="pln">
+  </span><span class="tag">&lt;li</span><span class="pln"> </span><span class="atn">ng-repeat</span><span class="pun">=</span><span class="atv">"img in phone.images"</span><span class="tag">&gt;</span><span class="pln">
+    </span><span class="tag">&lt;img</span><span class="pln"> </span><span class="atn">ng-src</span><span class="pun">=</span><span class="atv">"{{img}}"</span><span class="tag">&gt;</span><span class="pln">
+  </span><span class="tag">&lt;/li&gt;</span><span class="pln">
+</span><span class="tag">&lt;/ul&gt;</span><span class="pln">
+
+</span><span class="tag">&lt;ul</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"specs"</span><span class="tag">&gt;</span><span class="pln">
+  </span><span class="tag">&lt;li&gt;</span><span class="pln">
+    </span><span class="tag">&lt;span&gt;</span><span class="pln">Availability and Networks</span><span class="tag">&lt;/span&gt;</span><span class="pln">
+    </span><span class="tag">&lt;dl&gt;</span><span class="pln">
+      </span><span class="tag">&lt;dt&gt;</span><span class="pln">Availability</span><span class="tag">&lt;/dt&gt;</span><span class="pln">
+      </span><span class="tag">&lt;dd</span><span class="pln"> </span><span class="atn">ng-repeat</span><span class="pun">=</span><span class="atv">"availability in phone.availability"</span><span class="tag">&gt;</span><span class="pln">{{availability}}</span><span class="tag">&lt;/dd&gt;</span><span class="pln">
+    </span><span class="tag">&lt;/dl&gt;</span><span class="pln">
+  </span><span class="tag">&lt;/li&gt;</span><span class="pln">
+    ...
+  </span><span class="tag">&lt;/li&gt;</span><span class="pln">
+    </span><span class="tag">&lt;span&gt;</span><span class="pln">Additional Features</span><span class="tag">&lt;/span&gt;</span><span class="pln">
+    </span><span class="tag">&lt;dd&gt;</span><span class="pln">{{phone.additionalFeatures}}</span><span class="tag">&lt;/dd&gt;</span><span class="pln">
+  </span><span class="tag">&lt;/li&gt;</span><span class="pln">
+</span><span class="tag">&lt;/ul&gt;</span></code></pre>
+
+        <h3>测试</h3>
+
+        <p>我们来写一个新的单元测试，这个测试和我们在步骤5中为<code>PhoneListCtrl</code>写的那个很像。</p>
+
+        <p><strong>test/unit/controllersSpec.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+  describe</span><span class="pun">(</span><span class="str">'PhoneDetailCtrl'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(){</span><span class="pln">
+    </span><span class="kwd">var</span><span class="pln"> scope</span><span class="pun">,</span><span class="pln"> $httpBackend</span><span class="pun">,</span><span class="pln"> ctrl</span><span class="pun">;</span><span class="pln">
+
+    beforeEach</span><span class="pun">(</span><span class="pln">inject</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">(</span><span class="pln">_$httpBackend_</span><span class="pun">,</span><span class="pln"> $rootScope</span><span class="pun">,</span><span class="pln"> $routeParams</span><span class="pun">,</span><span class="pln"> $controller</span><span class="pun">)</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      $httpBackend </span><span class="pun">=</span><span class="pln"> _$httpBackend_</span><span class="pun">;</span><span class="pln">
+      $httpBackend</span><span class="pun">.</span><span class="pln">expectGET</span><span class="pun">(</span><span class="str">'phones/xyz.json'</span><span class="pun">).</span><span class="pln">respond</span><span class="pun">({</span><span class="pln">name</span><span class="pun">:</span><span class="str">'phone xyz'</span><span class="pun">});</span><span class="pln">
+
+      $routeParams</span><span class="pun">.</span><span class="pln">phoneId </span><span class="pun">=</span><span class="pln"> </span><span class="str">'xyz'</span><span class="pun">;</span><span class="pln">
+      scope </span><span class="pun">=</span><span class="pln"> $rootScope</span><span class="pun">.</span><span class="pln">$new</span><span class="pun">();</span><span class="pln">
+      ctrl </span><span class="pun">=</span><span class="pln"> $controller</span><span class="pun">(</span><span class="typ">PhoneDetailCtrl</span><span class="pun">,</span><span class="pln"> </span><span class="pun">{</span><span class="pln">$scope</span><span class="pun">:</span><span class="pln"> scope</span><span class="pun">});</span><span class="pln">
+    </span><span class="pun">}));</span><span class="pln">
+
+
+    it</span><span class="pun">(</span><span class="str">'should fetch phone detail'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">scope</span><span class="pun">.</span><span class="pln">phone</span><span class="pun">).</span><span class="pln">toBeUndefined</span><span class="pun">();</span><span class="pln">
+      $httpBackend</span><span class="pun">.</span><span class="pln">flush</span><span class="pun">();</span><span class="pln">
+
+      expect</span><span class="pun">(</span><span class="pln">scope</span><span class="pun">.</span><span class="pln">phone</span><span class="pun">).</span><span class="pln">toEqual</span><span class="pun">({</span><span class="pln">name</span><span class="pun">:</span><span class="str">'phone xyz'</span><span class="pun">});</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+
+        <p>执行<code>./scripts/test.sh</code>脚本来执行测试，你应该会看到如下输出：</p>
+
+        <pre class="prettyprint"><code><span class="typ">Chrome</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Runner</span><span class="pln"> reset</span><span class="pun">.</span><span class="pln">
+</span><span class="pun">...</span><span class="pln">
+</span><span class="typ">Total</span><span class="pln"> </span><span class="lit">3</span><span class="pln"> tests </span><span class="pun">(</span><span class="typ">Passed</span><span class="pun">:</span><span class="pln"> </span><span class="lit">3</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Fails</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Errors</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">(</span><span class="lit">5.00</span><span class="pln"> ms</span><span class="pun">)</span><span class="pln">
+  </span><span class="typ">Chrome</span><span class="pln"> </span><span class="lit">19.0</span><span class="pun">.</span><span class="lit">1084.36</span><span class="pln"> </span><span class="typ">Mac</span><span class="pln"> OS</span><span class="pun">:</span><span class="pln"> </span><span class="typ">Run</span><span class="pln"> </span><span class="lit">3</span><span class="pln"> tests </span><span class="pun">(</span><span class="typ">Passed</span><span class="pun">:</span><span class="pln"> </span><span class="lit">3</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Fails</span><span class="pun">:</span><span class="pln"> </span><span class="lit">0</span><span class="pun">;</span><span class="pln"> </span><span class="typ">Errors</span><span class="pln"> </span><span class="lit">0</span><span class="pun">)</span><span class="pln"> </span><span class="pun">(</span><span class="lit">5.00</span><span class="pln"> ms</span><span class="pun">)</span></code></pre>
+
+        <p>同时，我们也添加一个端到端测试，指向Nexus S手机详细信息页面并且验证页面的头部是“Nexus S”。</p>
+
+        <p><strong>test/e2e/scenarios.js</strong>
+        </p>
+
+        <pre class="prettyprint"><code><span class="pun">...</span><span class="pln">
+  describe</span><span class="pun">(</span><span class="str">'Phone detail view'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+
+    beforeEach</span><span class="pun">(</span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      browser</span><span class="pun">().</span><span class="pln">navigateTo</span><span class="pun">(</span><span class="str">'../../app/index.html#/phones/nexus-s'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+
+
+    it</span><span class="pun">(</span><span class="str">'should display nexus-s page'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">()</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+      expect</span><span class="pun">(</span><span class="pln">binding</span><span class="pun">(</span><span class="str">'phone.name'</span><span class="pun">)).</span><span class="pln">toBe</span><span class="pun">(</span><span class="str">'Nexus S'</span><span class="pun">);</span><span class="pln">
+    </span><span class="pun">});</span><span class="pln">
+  </span><span class="pun">});</span><span class="pln">
+</span><span class="pun">...</span></code></pre>
+
+        <p>你现在可以刷新你的浏览器，然后重新跑一遍端到端测试，或者你可以在<a href="http://angular.github.com/angular-phonecat/step-4/test/e2e/runner.html" target="_blank">AngularJS的服务器</a>上运行一下。</p>
+
+        <h2 id="zchq88-gundong-n11d2">练习</h2>
+
+        <p>使用<a href="http://code.angularjs.org/1.1.0/docs/guide/dev_guide.e2e-testing" target="_blank">AngularJS端到端测试API</a>写一个测试，用它来验证我们在Nexus S详细信息页面显示的四个缩略图。</p>
+
+        <h2 id="zchq88-gundong-n11d3">总结</h2>
+
+        <p>现在手机详细页面已经就绪了，在<a href="#" onclick="pymChild.sendMessage('href',11)">过滤器</a>中我们将学习如何写一个显示过滤器。</p>
+    </div>
+
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="../assets/js/polyfill/rem.min.js"></script>
+<script src="../assets/js/polyfill/respond.min.js"></script>
+<script src="../assets/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/amazeui.min.js"></script>
+    <!--<![endif]-->
+    <script src="http://cdn.bootcss.com/angular.js/1.4.0-rc.1/angular.js"></script>
+    <script src="../assets/js/pym.js"></script>
+    <script src="../assets/js/pym-child.js"></script>
+    <script src="../js/base.js"></script>
+</body>
+
+</html>
